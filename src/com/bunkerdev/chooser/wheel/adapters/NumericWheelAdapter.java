@@ -69,7 +69,7 @@ public class NumericWheelAdapter extends AbstractWheelTextAdapter {
         this.format = format;
     }
 
-    @Override
+    
     public CharSequence getItemText(int index) {
         if (index >= 0 && index < getItemsCount()) {
             int value = minValue + index;
@@ -78,7 +78,7 @@ public class NumericWheelAdapter extends AbstractWheelTextAdapter {
         return null;
     }
 
-    @Override
+    
     public int getItemsCount() {
         return maxValue - minValue + 1;
     }    

@@ -38,7 +38,7 @@ public class ArrayWheelAdapter<T> extends AbstractWheelTextAdapter {
         this.items = items;
     }
     
-    @Override
+    
     public CharSequence getItemText(int index) {
         if (index >= 0 && index < items.length) {
             T item = items[index];
@@ -50,7 +50,7 @@ public class ArrayWheelAdapter<T> extends AbstractWheelTextAdapter {
         return null;
     }
 
-    @Override
+    
     public int getItemsCount() {
         return items.length;
     }
