@@ -25,15 +25,26 @@
 			</TextView>
 	</LinearLayout>
 	<LinearLayout
-		android:orientation="vertical"
+		android:layout_marginTop="5dp"
+		android:layout_marginBottom="5dp"
+		android:weightSum="100"
+		android:orientation="horizontal"
 	  	android:layout_width="fill_parent"
 	  	android:layout_height="wrap_content">
 	  	<TextView 
 			android:id="@+id/choice" 
-			android:layout_width="fill_parent" 
-			android:layout_height="wrap_content"
+			android:layout_width="0dp"
+			android:layout_height="fill_parent"
+			android:layout_weight="85"
 			android:textSize="20sp"
-			android:layout_marginTop="5dp" android:layout_marginBottom="5dp">
+			>
 		</TextView>
+		<CheckBox 
+			android:id="@+id/choiceEnabled" 
+			android:layout_width="0dp" 
+			android:layout_height="wrap_content"
+			android:layout_weight="15"
+			>
+			</CheckBox>
 	</LinearLayout>
 </LinearLayout>

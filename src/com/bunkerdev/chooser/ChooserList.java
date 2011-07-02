@@ -18,7 +18,9 @@ import com.bunkerdev.chooser.wheel.adapters.NumericWheelAdapter;
 public class ChooserList extends Activity{
 	
 	ArrayList<SeekBar> bars;
-	Dialog dialog;
+	Dialog wheelDialog;
+	Dialog createOption;
+	LayoutInflater inflater;
 	
 	private static String tag = "TAG";
 
@@ -26,27 +28,27 @@ public class ChooserList extends Activity{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+        inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+
         bars = new ArrayList<SeekBar>();
         
         setContentView(R.layout.listtab);
         
-        initializeDialog();
+        initializeWheelDialog();
         TextView numChoicesView = (TextView)findViewById(R.id.numberChoices);
         numChoicesView.setOnClickListener(new OnClickListener() { 
 			
 			public void onClick(View v) {
-				dialog.show();				
+				wheelDialog.show();				
 			}
 		});
+        
         
 
 
     }
     
-    private void initializeDialog(){
-        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        
+    private void initializeWheelDialog(){
         View wheelLayout = inflater.inflate(R.layout.wheel, null);
         
         final WheelView numChoices = (WheelView) wheelLayout.findViewById(R.id.numChoices);
@@ -62,15 +64,20 @@ public class ChooserList extends Activity{
 				TextView numChoicesView = (TextView)findViewById(R.id.numberChoices);
 				Integer chosen = numChoices.getCurrentItem();
 				numChoicesView.setText(chosen.toString());
-				dialog.dismiss();
+				wheelDialog.dismiss();
 			}
 		});
         
-        dialog = new Dialog(this);
-        dialog.setTitle(R.string.numChoicesDialogTitle);
-        dialog.setContentView(R.layout.wheel);
-        dialog.setContentView(wheelLayout);
+        wheelDialog = new Dialog(this);
+        wheelDialog.setTitle(R.string.numChoicesDialogTitle);
+        wheelDialog.setContentView(R.layout.wheel);
+        wheelDialog.setContentView(wheelLayout);
 
+    }
+    
+    private void initializecreateOptionDialog(){
+    	
+    
     }
     
     

@@ -4,4 +4,6 @@
     <string name="app_name">Chooser</string>
     <string name="wheelButton">Select</string>
     <string name="numChoicesDialogTitle">Number of choices</string>
+    <string name="chooseButton">Choose!</string>
+    <string name="newOption">Add new option</string>
 </resources>
