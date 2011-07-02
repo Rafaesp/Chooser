@@ -5,14 +5,10 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -58,6 +54,17 @@ public class ChooserList extends Activity{
         numChoices.setViewAdapter(numChoicesAdapter);
         numChoices.setCyclic(true);
         numChoices.setVisibleItems(3);
+        
+        Button wheelButton = (Button) wheelLayout.findViewById(R.id.wheelButton);
+        wheelButton.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				TextView numChoicesView = (TextView)findViewById(R.id.numberChoices);
+				Integer chosen = numChoices.getCurrentItem();
+				numChoicesView.setText(chosen.toString());
+				dialog.dismiss();
+			}
+		});
         
         dialog = new Dialog(this);
         dialog.setTitle(R.string.numChoicesDialogTitle);
