@@ -8,45 +8,62 @@
 	android:orientation="vertical"
 	android:weightSum = "100"
 	>
-    <RelativeLayout 
+    <LinearLayout 
+    android:layout_weight="12"
     android:layout_marginTop="5dp"
     android:layout_height="0dp" 
-    android:id="@+id/linearLayout1" 
     android:layout_width="fill_parent" 
-    android:layout_weight="78"
-    android:orientation="vertical">
-        <TextView 
-        	android:layout_marginLeft="2dp"
-        	android:id="@+id/textView1" 
-        	android:textSize="18sp"
-        	android:layout_width="wrap_content" 
-        	android:layout_centerHorizontal="true" 
-        	android:text="@string/newOption" 
-        	android:gravity="center" 
-        	android:layout_height="40dp">
-        	</TextView>
-        	<ImageView 
-        	android:id="@+id/imageView1" 
+    android:orientation="horizontal"
+    android:gravity="center">
+    		<ImageView 
+        	android:id="@+id/addOptionI" 
         	android:layout_height="wrap_content" 
         	android:layout_width="wrap_content"
-        	android:layout_alignTop="@+id/textView1"
-        	android:layout_alignBottom="@+id/textView1"
-        	android:layout_toLeftOf="@+id/textView1"
-        	android:layout_centerHorizontal="true" 
-        	android:src="@drawable/create_contact">
+        	android:src="@drawable/create_contact" 
+        	android:clickable="true">
         	</ImageView>
-        <ListView 
+        <TextView 
+        	android:layout_marginLeft="2dp"
+        	android:id="@+id/addOption" 
+        	android:textSize="18sp"
+        	android:layout_width="wrap_content" 
+        	android:text="@string/newOption" 
+        	android:gravity="center" 
+        	android:layout_height="40dp"> 
+        	</TextView>
+   </LinearLayout>
+   <LinearLayout 
+    android:layout_marginTop="5dp"
+    android:layout_height="0dp" 
+    android:layout_width="fill_parent" 
+    android:layout_weight="76"
+    android:orientation="horizontal"
+    android:gravity="center">
+      		<!-- 
+      		<ScrollView 
         	android:layout_height="fill_parent" 
         	android:layout_width="fill_parent" 
-        	android:id="@+id/listView" 
-        	android:layout_below="@+id/textView1" 
-        	></ListView>        
-    </RelativeLayout>
+        	>
+      			<LinearLayout
+      			android:id="@+id/rows" 
+			    android:layout_height="fill_parent" 
+			    android:layout_width="fill_parent"
+			    android:orientation="vertical">
+			    </LinearLayout>   
+  			</ScrollView>
+  			 -->
+       <ExpandableListView 
+       		android:id="@+id/rows"
+       		android:layout_height="wrap_content" 
+       		android:layout_width="fill_parent" 
+       		>
+       	</ExpandableListView>
+    </LinearLayout>
     <LinearLayout 
+    android:layout_gravity="bottom"
     android:layout_height="0dp" 
-    android:id="@+id/linearLayout2" 
     android:layout_width="fill_parent" 
-    android:layout_weight="22"
+    android:layout_weight="12"
     android:weightSum="100">
         <TextView 
         android:text="1" 

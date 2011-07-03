@@ -2,7 +2,7 @@
 <resources>
     <string name="hello">Hello World, Main!</string>
     <string name="app_name">Chooser</string>
-    <string name="wheelButton">Select</string>
+    <string name="confirmButton">Confirm</string>
     <string name="numChoicesDialogTitle">Number of choices</string>
     <string name="chooseButton">Choose!</string>
     <string name="newOption">Add new option</string>

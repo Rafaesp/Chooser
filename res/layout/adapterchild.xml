@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<LinearLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:weightSum="100"
+		android:orientation="horizontal"
+	  	android:layout_width="fill_parent"
+	  	android:layout_height="wrap_content">
+		<SeekBar
+			android:id="@+id/seekbar"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="85"
+			android:layout_marginTop="5dp">
+		</SeekBar>
+		<TextView 
+			android:id="@+id/choiceWeight" 
+			android:layout_width="0dp" 
+			android:layout_height="wrap_content"
+			android:layout_weight="15"
+			>
+			</TextView>
+	</LinearLayout>
+	
