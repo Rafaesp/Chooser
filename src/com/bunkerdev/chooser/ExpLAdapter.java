@@ -2,7 +2,7 @@ package com.bunkerdev.chooser;
 
 import java.util.ArrayList;
 
-import android.content.res.Resources.NotFoundException;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,18 +16,19 @@ import android.widget.TextView;
 
 public class ExpLAdapter extends BaseExpandableListAdapter {
 	
-	ArrayList<SeekBar> bars;
-	ArrayList<TextView> weightViewList;
-	ArrayList<LinearLayout> groups;
-	ArrayList<LinearLayout> children;
-	LayoutInflater inflater;
+	private ArrayList<SeekBar> bars;
+	private ArrayList<LinearLayout> groups;
+	private ArrayList<LinearLayout> children;
+	private LayoutInflater inflater;
+	private static int tag;
+	
 	
 	public ExpLAdapter(LayoutInflater inf){
 		groups = new ArrayList<LinearLayout>();
 		children = new ArrayList<LinearLayout>();
 		bars = new ArrayList<SeekBar>();
-		weightViewList = new ArrayList<TextView>();
 		inflater = inf;
+		tag = 0;
 	}
 	
 	public Object getChild(int groupPosition, int childPosition) {
@@ -78,15 +79,7 @@ public class ExpLAdapter extends BaseExpandableListAdapter {
 		
 		TextView choiceNameView = (TextView) adapterGroup.findViewById(R.id.choice); 
 		choiceNameView.setText(name);
-		
-		CheckBox cb = (CheckBox) adapterGroup.findViewById(R.id.choiceEnabled);
-		cb.setOnClickListener(new OnClickListener() {
-			
-			public void onClick(View v) {
-				notifyDataSetChanged();
-			}
-		});
-		
+				
 		SeekBar sb = (SeekBar) adapterChild.findViewById(R.id.seekbar);
 		bars.add(sb);
 		

@@ -99,6 +99,7 @@ public class ChooserList extends Activity{
     	addOptionIView.setOnClickListener(addOptionClickListener);
     	
     	AlertDialog.Builder builder = new Builder(this);
+    	builder.setTitle(R.string.nameOptionDialogTitle);
     	builder.setPositiveButton(R.string.confirmButton, new DialogInterface.OnClickListener() {
 			
 			public void onClick(DialogInterface dialog, int which) {

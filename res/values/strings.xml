@@ -6,4 +6,5 @@
     <string name="numChoicesDialogTitle">Number of choices</string>
     <string name="chooseButton">Choose!</string>
     <string name="newOption">Add new option</string>
+    <string name="nameOptionDialogTitle">New option</string>
 </resources>

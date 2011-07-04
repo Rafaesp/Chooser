@@ -39,19 +39,6 @@
     android:layout_weight="76"
     android:orientation="horizontal"
     android:gravity="center">
-      		<!-- 
-      		<ScrollView 
-        	android:layout_height="fill_parent" 
-        	android:layout_width="fill_parent" 
-        	>
-      			<LinearLayout
-      			android:id="@+id/rows" 
-			    android:layout_height="fill_parent" 
-			    android:layout_width="fill_parent"
-			    android:orientation="vertical">
-			    </LinearLayout>   
-  			</ScrollView>
-  			 -->
        <ExpandableListView 
        		android:id="@+id/rows"
        		android:layout_height="wrap_content" 
