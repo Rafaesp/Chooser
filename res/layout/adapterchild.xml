@@ -13,6 +13,9 @@
 			android:layout_marginTop="5dp">
 		</SeekBar>
 		<TextView 
+			android:layout_marginTop="6dp"
+			android:textSize="16sp"
+			android:gravity="center"
 			android:id="@+id/choiceWeight" 
 			android:layout_width="0dp" 
 			android:layout_height="wrap_content"

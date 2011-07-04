@@ -7,21 +7,24 @@
 		android:orientation="horizontal"
 	  	android:layout_width="fill_parent"
 	  	android:layout_height="wrap_content"
-	  	android:paddingLeft="36dp">
+	  	android:paddingLeft="36dp"
+	  	android:gravity="right"
+	  	>
 	  	<TextView 
 	  		android:gravity="center_vertical"
 			android:id="@+id/choice" 
 			android:layout_width="0dp"
 			android:layout_height="fill_parent"
-			android:layout_weight="85"
+			android:layout_weight="82"
 			android:textSize="20sp"
 			android:focusable="false">
 		</TextView>
 		<CheckBox 
+			android:layout_gravity="right"
 			android:id="@+id/choiceEnabled" 
 			android:layout_width="0dp" 
 			android:layout_height="wrap_content"
-			android:layout_weight="15"
+			android:layout_weight="18"
 			android:checked="true" 
 			android:focusable="false">
 			</CheckBox>
