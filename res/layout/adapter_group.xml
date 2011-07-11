@@ -16,7 +16,7 @@
 			android:layout_width="0dp"
 			android:layout_height="fill_parent"
 			android:layout_weight="100"
-			android:textSize="20sp"
+			android:textSize="21sp"
 			android:focusable="false">
 		</TextView>
 		<!-- <CheckBox   Usar seekbar a 0

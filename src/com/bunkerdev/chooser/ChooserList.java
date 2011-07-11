@@ -31,7 +31,7 @@ public class ChooserList extends Activity{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.listtab);
+        setContentView(R.layout.options_list_tab);
         
         inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         
@@ -106,12 +106,13 @@ public class ChooserList extends Activity{
 				EditText opNameView = (EditText) createOptionDialog.findViewById(R.id.optionName);
 				Editable name = opNameView.getText();
 				name.clearSpans();
-				expAdapter.addChoice(name);			
+				//expAdapter.addChoiceSeekBar(name);
+				expAdapter.addChoiceRadioGroup(name);
 				createOptionDialog.dismiss();
 				opNameView.setText("");
 			}
 		});
-    	View optionName = (View) inflater.inflate(R.layout.optionname, null);
+    	View optionName = (View) inflater.inflate(R.layout.new_option, null);
     	builder.setView(optionName);
     	createOptionDialog = builder.create();
     }

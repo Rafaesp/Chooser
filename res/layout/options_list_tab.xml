@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout 
+<RelativeLayout 
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/wrapper" 
 	android:layout_width="fill_parent" 
@@ -9,9 +9,10 @@
 	android:weightSum = "100"
 	>
     <LinearLayout 
+    android:id="@+id/toplinlayout"
     android:layout_weight="12"
     android:layout_marginTop="5dp"
-    android:layout_height="0dp" 
+    android:layout_height="wrap_content" 
     android:layout_width="fill_parent" 
     android:orientation="horizontal"
     android:gravity="center">
@@ -33,25 +34,30 @@
         	</TextView>
    </LinearLayout>
    <LinearLayout 
+    android:id="@+id/midlinlayout"
     android:layout_marginTop="5dp"
-    android:layout_height="0dp" 
     android:layout_width="fill_parent" 
-    android:layout_weight="76"
+    android:layout_weight="70"
     android:orientation="horizontal"
-    android:gravity="center">
+    android:gravity="center" 
+    android:layout_below="@id/toplinlayout"
+    android:layout_above="@+id/bottomlinlayout"
+    android:layout_height="wrap_content">
        <ExpandableListView 
        		android:id="@+id/rows"
-       		android:layout_height="wrap_content" 
+       		android:layout_height="fill_parent" 
        		android:layout_width="fill_parent" 
        		>
        	</ExpandableListView>
     </LinearLayout>
     <LinearLayout 
+    android:id="@+id/bottomlinlayout"
     android:layout_gravity="bottom"
-    android:layout_height="0dp" 
     android:layout_width="fill_parent" 
-    android:layout_weight="12"
-    android:weightSum="100">
+    android:layout_weight="20"
+    android:weightSum="100"
+    android:layout_alignParentBottom="true" 
+    android:layout_height="50dp">
         <TextView 
         android:text="1" 
         android:id="@+id/numberChoices" 
@@ -75,4 +81,4 @@
         </Button> 
     </LinearLayout>
 	
-</LinearLayout>
+</RelativeLayout>

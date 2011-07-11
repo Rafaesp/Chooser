@@ -5,10 +5,8 @@ import java.util.ArrayList;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -20,7 +18,7 @@ public class ExpLAdapter extends BaseExpandableListAdapter {
 	private ArrayList<LinearLayout> groups;
 	private ArrayList<LinearLayout> children;
 	private LayoutInflater inflater;
-	private static int tag;
+	private static String tag = "TAG";
 	
 	
 	public ExpLAdapter(LayoutInflater inf){
@@ -28,7 +26,6 @@ public class ExpLAdapter extends BaseExpandableListAdapter {
 		children = new ArrayList<LinearLayout>();
 		bars = new ArrayList<SeekBar>();
 		inflater = inf;
-		tag = 0;
 	}
 	
 	public Object getChild(int groupPosition, int childPosition) {
@@ -73,19 +70,26 @@ public class ExpLAdapter extends BaseExpandableListAdapter {
 		return true;
 	}
 	
-	public void addChoice(CharSequence name){
-		LinearLayout adapterGroup = (LinearLayout) inflater.inflate(R.layout.adaptergroup, null);
-		LinearLayout adapterChild = (LinearLayout) inflater.inflate(R.layout.adapterchild, null);
+	public void addChoiceSeekBar(CharSequence name){
+		LinearLayout adapterGroup = (LinearLayout) inflater.inflate(R.layout.adapter_group, null);
+		LinearLayout adapterChild = (LinearLayout) inflater.inflate(R.layout.adapter_child_seekbar, null);
 		
 		TextView choiceNameView = (TextView) adapterGroup.findViewById(R.id.choice); 
 		choiceNameView.setText(name);
-				
+		
+		TextView weight = (TextView) adapterChild.findViewById(R.id.choiceWeight);
+		weight.setText(2+"");
+		
 		SeekBar sb = (SeekBar) adapterChild.findViewById(R.id.seekbar);
+		sb.setMax(3);
+		sb.setProgress(2);
 		bars.add(sb);
 		
 		sb.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			
 			public void onStopTrackingTouch(SeekBar seekBar) {
+				//refreshProgress(seekBar);
+				notifyDataSetChanged();
 			}
 			
 			public void onStartTrackingTouch(SeekBar seekBar) {
@@ -102,5 +106,66 @@ public class ExpLAdapter extends BaseExpandableListAdapter {
 		children.add(adapterChild);
 		notifyDataSetChanged();
 	}
+	
+	public void addChoiceRadioGroup(CharSequence name){
+		LinearLayout adapterGroup = (LinearLayout) inflater.inflate(R.layout.adapter_group, null);
+		LinearLayout adapterChild = (LinearLayout) inflater.inflate(R.layout.adapter_child_radiobuttons, null);
+		
+		TextView choiceNameView = (TextView) adapterGroup.findViewById(R.id.choice); 
+		choiceNameView.setText(name);
+		
+		groups.add(adapterGroup);
+		children.add(adapterChild);
+		notifyDataSetChanged();
+		
+	}
+	
 
+	
+	
+	/*
+	   private void refreshProgress(SeekBar bar){
+		Integer nProgress = bar.getProgress();
+		Integer oldProgress = (Integer) bar.getTag();
+		
+		boolean increased = nProgress>=oldProgress? true:false;
+		Integer progress = Math.abs(nProgress - oldProgress);
+		
+		Integer change = 0;
+		
+		Integer progressPerBar = ((Double)Math.floor(progress/(bars.size()-1))).intValue();
+		Integer rest = progress%(bars.size()-1);
+		Log.i(tag, "nProg: "+nProgress+" oldProg: "+oldProgress+" incres: "+increased+" progPerBar: "+progressPerBar+" rest: "+rest);
+		if(increased){
+			for(int i = 0; i<bars.size(); i++){
+				SeekBar ibar = bars.get(i);
+				if(!bar.equals(ibar)){
+					if(i<rest){
+						change = ibar.getProgress()-progressPerBar-1;
+						ibar.setProgress(change);
+					}else{
+						change = ibar.getProgress()-progressPerBar;
+						ibar.setProgress(change);
+					}
+					
+					ibar.setTag(change);
+				}
+			}
+		}else{
+			for(int i = 0; i<bars.size(); i++){
+				SeekBar ibar = bars.get(i);
+				if(!bar.equals(ibar)){
+					if(i<rest){
+						change = ibar.getProgress()+progressPerBar+1;
+						ibar.setProgress(change);
+					}else{
+						change = ibar.getProgress()+progressPerBar;
+						ibar.setProgress(change);
+					}
+					ibar.setTag(change);
+				}
+			}	
+		}
+	}
+	*/
 }
