@@ -1,13 +1,16 @@
 package com.bunkerdev.chooser;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
-import android.util.Log;
+import com.bunkerdev.chooser.Choice.Weighing;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -107,12 +110,17 @@ public class ExpLAdapter extends BaseExpandableListAdapter {
 		notifyDataSetChanged();
 	}
 	
-	public void addChoiceRadioGroup(String name){
+	public void addChoiceRadioGroup(Choice c){
 		LinearLayout adapterGroup = (LinearLayout) inflater.inflate(R.layout.adapter_group, null);
 		LinearLayout adapterChild = (LinearLayout) inflater.inflate(R.layout.adapter_child_radiobuttons, null);
 		
+		adapterGroup.setTag(c);
+		
+		RadioGroup rg = (RadioGroup) adapterChild.findViewById(R.id.rgWeighing);
+		adapterChild.setTag(rg);
+		
 		TextView choiceNameView = (TextView) adapterGroup.findViewById(R.id.choice); 
-		choiceNameView.setText(name);
+		choiceNameView.setText(c.getName());
 		
 		groups.add(adapterGroup);
 		children.add(adapterChild);
@@ -120,6 +128,33 @@ public class ExpLAdapter extends BaseExpandableListAdapter {
 		
 	}
 	
+    public void refreshWeighings(){
+    	for(int i=0; i<groups.size();i++){
+    		Choice c = (Choice) groups.get(i).getTag();
+    		RadioGroup rgWeighing = (RadioGroup) children.get(i).getTag();
+    		Weighing weight;
+    		switch (rgWeighing.getCheckedRadioButtonId()) {
+    		case R.id.rbnever:
+				weight = Weighing.NEVER;
+				break;
+    		case R.id.rbalmostimpossible:
+    			weight = Weighing.ALMOSTIMPOSSIBLE;
+				break;
+    		case R.id.rbnormal:
+    			weight = Weighing.NORMAL;
+				break;
+    		case R.id.rbabovenormal:
+    			weight = Weighing.ABOVENORMAL;
+				break;
+			default:
+				weight = Weighing.NORMAL;
+				break;
+			}
+    		
+    		c.setWeight(weight);
+    		
+    	}
+    }
 
 	
 	
