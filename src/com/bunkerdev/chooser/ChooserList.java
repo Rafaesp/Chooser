@@ -1,5 +1,7 @@
 package com.bunkerdev.chooser;
 
+import java.util.LinkedList;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -30,6 +32,7 @@ public class ChooserList extends Activity{
 	private AlertDialog createOptionDialog;
 	private LayoutInflater inflater;
 	private ExpLAdapter expAdapter;
+	private LinkedList<Choice> choices;
 	
 	private static String tag = "TAG";
 
@@ -53,6 +56,8 @@ public class ChooserList extends Activity{
 			
 			public void onClick(View v) {
 				//TODO
+				expAdapter.refreshWeighings();
+				
 			}
 		});
     }
@@ -111,15 +116,16 @@ public class ChooserList extends Activity{
 				RadioGroup opType = (RadioGroup) createOptionDialog.findViewById(R.id.rgOptionType);
 				
 				int type = opType.getCheckedRadioButtonId();
-				String name;
+				Choice c;
 				
 				switch (type) {
 				case R.id.rbSimple:
 					EditText opNameView = (EditText) createOptionDialog.findViewById(R.id.optionName);
 					Editable nameEdit = opNameView.getText();
 					nameEdit.clearSpans();
-					name = nameEdit.toString();
-					expAdapter.addChoiceRadioGroup(name);
+					c = new Choice(nameEdit.toString());
+					choices.add(c);
+					expAdapter.addChoiceRadioGroup(c);
 					createOptionDialog.dismiss();
 					opNameView.setText("");
 					break;
@@ -133,8 +139,10 @@ public class ChooserList extends Activity{
 							Toast t = Toast.makeText(getApplicationContext(), R.string.toastRangeError, 3000);
 							t.show();
 						}else{
-							name = getText(R.string.rangeName1)+" "+rIni+" "+getText(R.string.rangeName2)+" "+rEnd;
-							expAdapter.addChoiceRadioGroup(name);
+							String name = getText(R.string.rangeName1)+" "+rIni+" "+getText(R.string.rangeName2)+" "+rEnd;
+							c = new Choice(name, rIni, rEnd);
+							choices.add(c);
+							expAdapter.addChoiceRadioGroup(c);
 							createOptionDialog.dismiss();
 						}
 					} catch (NumberFormatException e) {
@@ -188,7 +196,4 @@ public class ChooserList extends Activity{
     	createOptionDialog = builder.create();
     }
     
-   
-
-
 }
