@@ -70,7 +70,7 @@ public class ExpLAdapter extends BaseExpandableListAdapter {
 		return true;
 	}
 	
-	public void addChoiceSeekBar(CharSequence name){
+	public void addChoiceSeekBar(String name){
 		LinearLayout adapterGroup = (LinearLayout) inflater.inflate(R.layout.adapter_group, null);
 		LinearLayout adapterChild = (LinearLayout) inflater.inflate(R.layout.adapter_child_seekbar, null);
 		
@@ -107,7 +107,7 @@ public class ExpLAdapter extends BaseExpandableListAdapter {
 		notifyDataSetChanged();
 	}
 	
-	public void addChoiceRadioGroup(CharSequence name){
+	public void addChoiceRadioGroup(String name){
 		LinearLayout adapterGroup = (LinearLayout) inflater.inflate(R.layout.adapter_group, null);
 		LinearLayout adapterChild = (LinearLayout) inflater.inflate(R.layout.adapter_child_radiobuttons, null);
 		

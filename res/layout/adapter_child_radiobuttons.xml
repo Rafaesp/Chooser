@@ -5,23 +5,24 @@
 	android:layout_width="fill_parent" android:layout_height="wrap_content"
 	android:orientation="vertical">
 		<RadioButton 
-			android:text="@string/rbnever"
+			android:text="@string/rbNever"
 			android:textSize="17sp"
 			android:id="@+id/rbnever"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content">
 		</RadioButton>
 		<RadioButton
-			android:text="@string/rbalmostimpossible" 
+			android:text="@string/rbAlmostImpossible" 
 			android:textSize="17sp"
 			android:id="@+id/rbalmostimpossible"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content" 
-			android:layout_alignParentRight="true" android:layout_marginRight="5dp">
+			android:layout_alignParentRight="true" 
+			android:layout_marginRight="5dp">
 		</RadioButton>
 		<RadioButton 
 			android:checked="true"
-			android:text="@string/rbnormal"
+			android:text="@string/rbNormal"
 			android:textSize="17sp"
 			android:id="@+id/rbnormal"
 			android:layout_width="wrap_content"
@@ -29,7 +30,7 @@
 			android:layout_below="@id/rbnever">
 		</RadioButton>
 		<RadioButton 
-			android:text="@string/rbabovenormal"
+			android:text="@string/rbAboveNormal"
 			android:textSize="17sp"
 			android:id="@+id/rbabovenormal"
 			android:layout_width="wrap_content"

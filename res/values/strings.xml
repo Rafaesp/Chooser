@@ -7,8 +7,16 @@
     <string name="chooseButton">Choose!</string>
     <string name="newOption">Add new option</string>
     <string name="nameOptionDialogTitle">New option</string>
-    <string name="rbnever">Never</string>
-    <string name="rbalmostimpossible">Almost impossible</string>
-    <string name="rbnormal">Normal</string>
-    <string name="rbabovenormal">Above normal</string>
+    <string name="rbNever">Never</string>
+    <string name="rbAlmostImpossible">Almost impossible</string>
+    <string name="rbNormal">Normal</string>
+    <string name="rbAboveNormal">Above normal</string>
+    <string name="nameChoiceHint">Name of the option</string>
+    <string name="rbSimpleOption">Simple option</string>
+    <string name="rbRangeOption">Range of numbers</string>
+    <string name="rangeFrom">From</string>
+    <string name="rangeTo">To</string>
+    <string name="toastRangeError">\'From\' number must be higher than \'To\' number</string>
+    <string name="rangeName1">A number from</string>
+    <string name="rangeName2">to</string>
 </resources>

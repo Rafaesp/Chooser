@@ -10,10 +10,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bunkerdev.chooser.wheel.WheelView;
 import com.bunkerdev.chooser.wheel.adapters.NumericWheelAdapter;
@@ -99,21 +105,86 @@ public class ChooserList extends Activity{
     	addOptionIView.setOnClickListener(addOptionClickListener);
     	
     	AlertDialog.Builder builder = new Builder(this);
-    	builder.setTitle(R.string.nameOptionDialogTitle);
     	builder.setPositiveButton(R.string.confirmButton, new DialogInterface.OnClickListener() {
 			
 			public void onClick(DialogInterface dialog, int which) {
-				EditText opNameView = (EditText) createOptionDialog.findViewById(R.id.optionName);
-				Editable name = opNameView.getText();
-				name.clearSpans();
-				//expAdapter.addChoiceSeekBar(name);
-				expAdapter.addChoiceRadioGroup(name);
-				createOptionDialog.dismiss();
-				opNameView.setText("");
+				RadioGroup opType = (RadioGroup) createOptionDialog.findViewById(R.id.rgOptionType);
+				
+				int type = opType.getCheckedRadioButtonId();
+				String name;
+				
+				switch (type) {
+				case R.id.rbSimple:
+					EditText opNameView = (EditText) createOptionDialog.findViewById(R.id.optionName);
+					Editable nameEdit = opNameView.getText();
+					nameEdit.clearSpans();
+					name = nameEdit.toString();
+					expAdapter.addChoiceRadioGroup(name);
+					createOptionDialog.dismiss();
+					opNameView.setText("");
+					break;
+				case R.id.rbRange:
+					EditText etRangeIni = (EditText) createOptionDialog.findViewById(R.id.rangeIni);
+					EditText etRangeEnd = (EditText) createOptionDialog.findViewById(R.id.rangeEnd);
+					try {
+						Integer rIni = new Integer(etRangeIni.getText().toString());
+						Integer rEnd = new Integer(etRangeEnd.getText().toString());
+						if(rIni>=rEnd){
+							Toast t = Toast.makeText(getApplicationContext(), R.string.toastRangeError, 3000);
+							t.show();
+						}else{
+							name = getText(R.string.rangeName1)+" "+rIni+" "+getText(R.string.rangeName2)+" "+rEnd;
+							expAdapter.addChoiceRadioGroup(name);
+							createOptionDialog.dismiss();
+						}
+					} catch (NumberFormatException e) {
+						Toast t = Toast.makeText(getApplicationContext(), R.string.toastRangeError, 3000);
+						t.show();
+					}
+					
+					etRangeIni.setText("");
+					etRangeEnd.setText("");
+					
+					break;
+				default:
+					break;
+				}
+				
 			}
 		});
-    	View optionName = (View) inflater.inflate(R.layout.new_option, null);
-    	builder.setView(optionName);
+    	View newOption = (View) inflater.inflate(R.layout.new_option, null);
+    	
+    	RadioButton rbSimple = (RadioButton) newOption.findViewById(R.id.rbSimple);
+    	RadioButton rbRange = (RadioButton) newOption.findViewById(R.id.rbRange);
+		EditText opNameView = (EditText) newOption.findViewById(R.id.optionName);
+		RelativeLayout rangeLayout = (RelativeLayout) newOption.findViewById(R.id.rlRange);
+    	
+    	rbSimple.setTag(opNameView);
+    	rbRange.setTag(rangeLayout);
+    	
+    	OnCheckedChangeListener typeChangeListener = new OnCheckedChangeListener() {
+			
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				Object obj = buttonView.getTag();
+				
+				if(obj instanceof EditText){
+					if(isChecked)
+						((EditText) obj).setVisibility(View.VISIBLE);
+					else
+						((EditText) obj).setVisibility(View.GONE);
+				}else{
+					if(isChecked)
+						((RelativeLayout) obj).setVisibility(View.VISIBLE);
+					else
+						((RelativeLayout) obj).setVisibility(View.GONE);
+				}
+			}
+		};
+		
+		rbSimple.setOnCheckedChangeListener(typeChangeListener);
+		rbRange.setOnCheckedChangeListener(typeChangeListener);
+		
+    	builder.setView(newOption);
     	createOptionDialog = builder.create();
     }
     

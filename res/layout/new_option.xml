@@ -1,16 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_gravity="center_horizontal"
     android:layout_width="wrap_content" 
     android:layout_height="wrap_content"
-    android:gravity="center"> 
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp">
+    <RadioGroup 
+    	android:id="@+id/rgOptionType" 
+    	android:layout_width="wrap_content" 
+    	android:layout_height="wrap_content">
+	    <RadioButton 
+	    	android:layout_width="wrap_content" 
+	    	android:layout_height="wrap_content" 
+	    	android:text="@string/rbSimpleOption" 
+	    	android:id="@+id/rbSimple" 
+	    	android:checked="true">
+	    </RadioButton> 
+	    <RadioButton 
+		    android:layout_width="wrap_content" 
+		    android:layout_height="wrap_content" 
+		    android:text="@string/rbRangeOption" 
+		    android:id="@+id/rbRange"
+		    >
+	    </RadioButton>
+    </RadioGroup>
     <EditText
-    android:id="@+id/optionName"
-    android:textSize="16sp"
-    android:layout_marginLeft="2dp"
-    android:layout_marginRight="2dp"
-    android:layout_width="200dp" 
-    android:layout_height="wrap_content"> 
+	    android:id="@+id/optionName"
+	    android:textSize="16sp"
+	    android:layout_marginLeft="2dp"
+	    android:layout_marginRight="2dp"
+	    android:layout_width="200dp" 
+	    android:layout_height="wrap_content"
+	    android:layout_below="@+id/rgOptionType"
+	    > 
     </EditText>
-</LinearLayout>
+   
+    <RelativeLayout
+    	android:id="@+id/rlRange"
+    	android:layout_height="wrap_content"
+    	android:layout_width="wrap_content"
+    	android:layout_alignLeft="@id/optionName"
+    	android:layout_alignRight="@id/optionName"
+    	android:layout_below="@+id/rgOptionType"
+    	android:visibility="gone"
+    	>
+        <TextView 
+        	android:text="@string/rangeFrom" 
+        	android:layout_width="wrap_content" 
+        	android:id="@+id/rangeFrom" 
+        	android:layout_alignBottom="@+id/rangeIni"
+        	android:layout_alignTop="@+id/rangeIni"
+        	android:gravity="center"
+        	android:layout_marginRight="5dp"
+        	android:layout_height="wrap_content">
+        </TextView>
+	    <EditText 
+	    	android:inputType="number"
+	    	android:layout_width="50dp" 
+	    	android:layout_marginRight="5dp"
+	    	android:layout_toRightOf="@+id/rangeFrom"
+	    	android:id="@+id/rangeIni" 
+	    	android:layout_height="wrap_content"
+	    	android:gravity="center"
+	    	android:maxLength="3"
+	    	></EditText>
+        <TextView 
+        	android:text="@string/rangeTo"
+        	android:layout_width="wrap_content" 
+        	android:id="@+id/rangeTo" 
+        	android:layout_marginRight="5dp"
+        	android:layout_toRightOf="@+id/rangeIni"
+        	android:layout_alignBottom="@+id/rangeIni"
+        	android:layout_alignTop="@+id/rangeIni"
+        	android:gravity="center"
+        	android:layout_height="wrap_content">
+        </TextView>	
+	    <EditText 
+	    	android:inputType="number"
+		    android:layout_width="50dp" 
+		    android:id="@+id/rangeEnd" 
+		    android:layout_height="wrap_content"
+		    android:layout_toRightOf="@+id/rangeTo"
+		    android:gravity="center"
+		    android:maxLength="3"
+	    ></EditText>
+    </RelativeLayout>
+</RelativeLayout>
