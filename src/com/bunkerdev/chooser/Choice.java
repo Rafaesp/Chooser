@@ -2,7 +2,7 @@ package com.bunkerdev.chooser;
 
 import java.io.Serializable;
 
-public class Choice implements Serializable {
+public class Choice implements Serializable, Cloneable {
 
 	private static final long serialVersionUID = -2045169531698578334L;
 	public enum Weighing {NEVER, ALMOSTIMPOSSIBLE, NORMAL, ABOVENORMAL};
@@ -63,8 +63,25 @@ public class Choice implements Serializable {
 	public void setRangeEnd(Integer rangeEnd) {
 		this.rangeEnd = rangeEnd;
 	}
-	
-	
-	
+
+	@Override
+	public String toString() {
+		if(!range)
+			return "Choice name: " + name;
+		else
+			return "Choice range: "+rangeIni+"-"+rangeEnd; 
+	}
+
+	@Override
+	protected Object clone() {
+		Choice c = null;
+		try{
+			c = (Choice)super.clone();
+			
+		}catch(CloneNotSupportedException e){
+			e.printStackTrace();
+		}
+		return c;
+	}
 	
 }
