@@ -59,8 +59,7 @@
     android:layout_alignParentBottom="true" 
     android:layout_height="50dp">
         <TextView 
-        android:text="1" 
-        android:id="@+id/numberChoices" 
+        android:id="@+id/tvNumberChoices" 
         android:layout_width="0dp" 
         android:layout_height="fill_parent"
         android:layout_weight="50" 

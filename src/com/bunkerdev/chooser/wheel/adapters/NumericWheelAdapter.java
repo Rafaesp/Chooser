@@ -68,9 +68,24 @@ public class NumericWheelAdapter extends AbstractWheelTextAdapter {
         this.maxValue = maxValue;
         this.format = format;
     }
-
     
-    public CharSequence getItemText(int index) {
+    public int getMinValue() {
+		return minValue;
+	}
+
+	public void setMinValue(int minValue) {
+		this.minValue = minValue;
+	}
+
+	public int getMaxValue() {
+		return maxValue;
+	}
+
+	public void setMaxValue(int maxValue) {
+		this.maxValue = maxValue;
+	}
+
+	public CharSequence getItemText(int index) {
         if (index >= 0 && index < getItemsCount()) {
             int value = minValue + index;
             return format != null ? String.format(format, value) : Integer.toString(value);

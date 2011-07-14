@@ -3,13 +3,13 @@ package com.bunkerdev.chooser;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import android.R.style;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,6 +36,7 @@ public class ChooserList extends Activity{
 	private ExpLAdapter expAdapter;
 	private LinkedList<Choice> choices;
 	private Integer numChoices;
+	private WheelView wheel;
 	
 	private static String tag = "TAG";
 
@@ -46,7 +47,6 @@ public class ChooserList extends Activity{
         setContentView(R.layout.options_list_tab);
         
         choices = new LinkedList<Choice>();
-        numChoices = 1;
         
         inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         
@@ -65,7 +65,7 @@ public class ChooserList extends Activity{
 				expAdapter.refreshWeighings();
 				WeightedRandom randGenerator= new WeightedRandom(choices);
 				
-				ArrayList<Choice> choosen = randGenerator.getChoice(numChoices);
+				ArrayList<Choice> chosen = randGenerator.getChoice(numChoices);
 				//Log.i(tag, randGenerator.doStatistics(100));	
 				
 			}
@@ -73,33 +73,40 @@ public class ChooserList extends Activity{
     }
     
     private void initializeWheel(){
-    	 TextView numChoicesView = (TextView)findViewById(R.id.numberChoices);
-         numChoicesView.setOnClickListener(new OnClickListener() { 
- 			
- 			public void onClick(View v) {
- 				wheelDialog.show();	
- 			}
- 		});
-    	
         View wheelLayout = inflater.inflate(R.layout.wheel, null);
         AlertDialog.Builder builder = new Builder(this);
         
-        final WheelView numChoicesWheel = (WheelView) wheelLayout.findViewById(R.id.numChoicesDialog);
+        wheel = (WheelView) wheelLayout.findViewById(R.id.wheel);
+        
         final NumericWheelAdapter numChoicesAdapter = new NumericWheelAdapter(this);
-        numChoicesWheel.setViewAdapter(numChoicesAdapter);
-        numChoicesWheel.setCyclic(true);
-        numChoicesWheel.setVisibleItems(3);
+        wheel.setViewAdapter(numChoicesAdapter);
+        wheel.setCyclic(false);
+        wheel.setVisibleItems(3);
         
         builder.setTitle(R.string.numChoicesDialogTitle);
         builder.setView(wheelLayout);
         builder.setPositiveButton(R.string.confirmButton, new DialogInterface.OnClickListener() {
 
-			public void onClick(DialogInterface dialog, int which) {
-				TextView numChoicesView = (TextView)findViewById(R.id.numberChoices);
-				Integer chosen = numChoicesWheel.getCurrentItem();
+		public void onClick(DialogInterface dialog, int which) {
+				TextView numChoicesView = (TextView)findViewById(R.id.tvNumberChoices);
+				Integer chosen = wheel.getCurrentItem();
 				numChoices = chosen;
 				numChoicesView.setText(chosen.toString());
 				wheelDialog.dismiss();				
+			}
+		});
+        
+        TextView numChoicesView = (TextView)findViewById(R.id.tvNumberChoices);
+		numChoices = 1;
+		numChoicesView.setText(1+"");
+        
+		((NumericWheelAdapter)wheel.getViewAdapter()).setMaxValue(choices.size());
+		
+       numChoicesView.setOnClickListener(new OnClickListener() { 
+			
+			public void onClick(View v) {
+				((NumericWheelAdapter)wheel.getViewAdapter()).setMaxValue(choices.size());
+				wheelDialog.show();	
 			}
 		});
        
@@ -119,8 +126,8 @@ public class ChooserList extends Activity{
 		
     	addOptionView.setOnClickListener(addOptionClickListener);
     	addOptionIView.setOnClickListener(addOptionClickListener);
-    	
     	AlertDialog.Builder builder = new Builder(this);
+    	
     	builder.setPositiveButton(R.string.confirmButton, new DialogInterface.OnClickListener() {
 			
 			public void onClick(DialogInterface dialog, int which) {

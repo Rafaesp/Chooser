@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_gravity="center_horizontal"
+    android:layout_gravity="center"
     android:layout_width="wrap_content" 
     android:layout_height="wrap_content"
     android:paddingLeft="5dp"
@@ -9,28 +9,34 @@
     <RadioGroup 
     	android:id="@+id/rgOptionType" 
     	android:layout_width="wrap_content" 
-    	android:layout_height="wrap_content">
+    	android:layout_height="wrap_content"
+    	android:layout_centerHorizontal="true">
 	    <RadioButton 
 	    	android:layout_width="wrap_content" 
 	    	android:layout_height="wrap_content" 
 	    	android:text="@string/rbSimpleOption" 
 	    	android:id="@+id/rbSimple" 
+	    	android:textColor="@android:color/white"
 	    	android:checked="true">
 	    </RadioButton> 
 	    <RadioButton 
 		    android:layout_width="wrap_content" 
 		    android:layout_height="wrap_content" 
 		    android:text="@string/rbRangeOption" 
+		    android:textColor="@android:color/white"
 		    android:id="@+id/rbRange"
 		    >
 	    </RadioButton>
     </RadioGroup>
     <EditText
+    	android:layout_centerHorizontal="true"
 	    android:id="@+id/optionName"
 	    android:textSize="16sp"
 	    android:layout_marginLeft="2dp"
 	    android:layout_marginRight="2dp"
-	    android:layout_width="200dp" 
+	    android:layout_width="wrap_content"
+	    android:maxLength="25"
+	    android:ems="24" 
 	    android:layout_height="wrap_content"
 	    android:layout_below="@+id/rgOptionType"
 	    > 
@@ -38,6 +44,7 @@
    
     <RelativeLayout
     	android:id="@+id/rlRange"
+    	android:layout_centerHorizontal="true"
     	android:layout_height="wrap_content"
     	android:layout_width="wrap_content"
     	android:layout_alignLeft="@id/optionName"
@@ -52,18 +59,20 @@
         	android:layout_alignBottom="@+id/rangeIni"
         	android:layout_alignTop="@+id/rangeIni"
         	android:gravity="center"
+	    	android:textColor="@android:color/white"
         	android:layout_marginRight="5dp"
         	android:layout_height="wrap_content">
         </TextView>
 	    <EditText 
 	    	android:inputType="number"
-	    	android:layout_width="50dp" 
+	    	android:layout_width="wrap_content" 
 	    	android:layout_marginRight="5dp"
 	    	android:layout_toRightOf="@+id/rangeFrom"
 	    	android:id="@+id/rangeIni" 
 	    	android:layout_height="wrap_content"
 	    	android:gravity="center"
-	    	android:maxLength="3"
+	    	android:maxLength="5"
+	    	android:ems="4"
 	    	></EditText>
         <TextView 
         	android:text="@string/rangeTo"
@@ -74,16 +83,18 @@
         	android:layout_alignBottom="@+id/rangeIni"
         	android:layout_alignTop="@+id/rangeIni"
         	android:gravity="center"
+        	android:textColor="@android:color/white"
         	android:layout_height="wrap_content">
         </TextView>	
 	    <EditText 
 	    	android:inputType="number"
-		    android:layout_width="50dp" 
+		    android:layout_width="wrap_content" 
 		    android:id="@+id/rangeEnd" 
 		    android:layout_height="wrap_content"
 		    android:layout_toRightOf="@+id/rangeTo"
 		    android:gravity="center"
-		    android:maxLength="3"
+		    android:maxLength="5"
+	    	android:ems="4"
 	    ></EditText>
     </RelativeLayout>
 </RelativeLayout>
