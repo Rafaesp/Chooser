@@ -3,22 +3,29 @@ package com.bunkerdev.chooser;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import android.R.style;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -37,6 +44,8 @@ public class ChooserList extends Activity{
 	private LinkedList<Choice> choices;
 	private Integer numChoices;
 	private WheelView wheel;
+	private PopupWindow resultPopup;
+	private View view;
 	
 	private static String tag = "TAG";
 
@@ -45,7 +54,8 @@ public class ChooserList extends Activity{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.options_list_tab);
-        
+    	view = (RelativeLayout) findViewById(R.id.wrapper);
+
         choices = new LinkedList<Choice>();
         
         inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -56,6 +66,7 @@ public class ChooserList extends Activity{
         
         initializeWheel();
         initializeCreateOption();
+        initializeResultPopup();
         
         Button chooseBtn = (Button) findViewById(R.id.chooseButton);
         chooseBtn.setOnClickListener(new OnClickListener() {
@@ -67,7 +78,10 @@ public class ChooserList extends Activity{
 				
 				ArrayList<Choice> chosen = randGenerator.getChoice(numChoices);
 				//Log.i(tag, randGenerator.doStatistics(100));	
-				
+				ListView resultList = (ListView) resultPopup.getContentView().findViewById(R.id.resultList);
+		    	ListAdapter resultAdapter = new ArrayAdapter<Choice>(getApplicationContext(), R.layout.simple_textview, chosen);
+				resultList.setAdapter(resultAdapter);
+				resultPopup.showAtLocation(view, Gravity.CENTER_VERTICAL, 0, 0);
 			}
 		});
     }
@@ -212,6 +226,27 @@ public class ChooserList extends Activity{
 		
     	builder.setView(newOption);
     	createOptionDialog = builder.create();
+    }
+    
+    private void initializeResultPopup(){
+    	View popupView = inflater.inflate(R.layout.result, null);
+    	popupView.setBackgroundColor(Color.GRAY);
+    	Button backBtn = (Button) popupView.findViewById(R.id.btnResultLeft);
+    	backBtn.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				resultPopup.dismiss();
+			}
+		});
+    	Button exitBtn = (Button) popupView.findViewById(R.id.btnResultRight);
+    	exitBtn.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				finish();
+			}
+		});
+    	
+    	WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+    	resultPopup = new PopupWindow(popupView, wm.getDefaultDisplay().getWidth(), 3*(wm.getDefaultDisplay().getHeight()/4), true);
+    	
     }
     
 }

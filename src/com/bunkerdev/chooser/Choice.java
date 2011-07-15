@@ -67,9 +67,9 @@ public class Choice implements Serializable, Cloneable {
 	@Override
 	public String toString() {
 		if(!range)
-			return "Choice name: " + name;
+			return name;
 		else
-			return "Choice range: "+rangeIni+"-"+rangeEnd; 
+			return rangeIni+" - "+rangeEnd; 
 	}
 
 	@Override

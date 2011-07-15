@@ -19,4 +19,7 @@
     <string name="toastRangeError">\'From\' number must be higher than \'To\' number</string>
     <string name="rangeName1">A number from</string>
     <string name="rangeName2">to</string>
+    <string name="titleResult">Results</string>
+    <string name="btnResultBack">Back</string>
+    <string name="btnResultExit">Exit</string>
 </resources>
