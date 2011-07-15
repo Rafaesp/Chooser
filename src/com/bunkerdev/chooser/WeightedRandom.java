@@ -155,8 +155,11 @@ public class WeightedRandom {
 	        	counter += choiceValues.get(c);
 //	        	Log.i(tag, "counter:" +counter+" rand: "+rand+" total: "+totalWeight);
 	        	if(counter >= rand){
-	        		if(!resList.contains(c))
-	    	        	resList.add(c);
+	        		if(!resList.contains(c)){
+	    	        	if(c.isRange())
+	    	        		c.setChosen(getChosenFromRange(c));
+	        			resList.add(c);
+	        		}
 	        		break;
 	        	}
 	        }
@@ -165,6 +168,15 @@ public class WeightedRandom {
     	}
     
         return resList;
+    }
+    
+    private Integer getChosenFromRange(Choice c){
+    	int min = c.getRangeIni();
+    	int max = c.getRangeEnd()-c.getRangeIni();
+    	Double randDouble = min + Math.random()*max;
+    	String strRand = Math.rint(randDouble)+"";
+    	Integer rand = new Integer(strRand);
+    	return rand;
     }
 
 	private Double getTotalWeight() {
