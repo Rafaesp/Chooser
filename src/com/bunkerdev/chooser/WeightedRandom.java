@@ -174,8 +174,7 @@ public class WeightedRandom {
     	int min = c.getRangeIni();
     	int max = c.getRangeEnd()-c.getRangeIni();
     	Double randDouble = min + Math.random()*max;
-    	String strRand = Math.rint(randDouble)+"";
-    	Integer rand = new Integer(strRand);
+    	Integer rand = ((Double)Math.rint(randDouble)).intValue();
     	return rand;
     }
 
