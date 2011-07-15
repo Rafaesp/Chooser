@@ -80,7 +80,7 @@ public class Choice implements Serializable, Cloneable {
 		if(!range)
 			return name;
 		else
-			return rangeIni+" - "+rangeEnd; 
+			return rangeIni+" - "+rangeEnd+": "+chosen; 
 	}
 
 	@Override
