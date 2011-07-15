@@ -1,5 +1,7 @@
 package com.bunkerdev.chooser;
 
+import java.util.ArrayList;
+
 import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -9,13 +11,17 @@ import android.widget.TabHost;
 public class Main extends TabActivity {
 	
 	private Intent intent;
+	private TabHost tabHost;
+	private ArrayList<Choice> aux;
 	
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.tabhost);
 
+	    aux = new ArrayList<Choice>();
+	    
 	    Resources res = getResources(); // Resource object to get Drawables
-	    TabHost tabHost = getTabHost();  // The activity TabHost
+	    tabHost = getTabHost();  // The activity TabHost
 	    TabHost.TabSpec spec;  // Resusable TabSpec for each tab
 	    Intent intent;  // Reusable Intent for each tab
 
@@ -39,4 +45,17 @@ public class Main extends TabActivity {
 	    tabHost.setCurrentTab(0);
 	    
 	}
+	
+	public void switchTab(int tab){
+        tabHost.setCurrentTab(tab);
+	}
+
+	public ArrayList<Choice> getAux() {
+		return aux;
+	}
+
+	public void setAux(ArrayList<Choice> aux) {
+		this.aux = aux;
+	}
 }
+

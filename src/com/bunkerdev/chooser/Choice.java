@@ -74,7 +74,11 @@ public class Choice implements Serializable, Cloneable {
 	public void setChosen(Integer chosen) {
 		this.chosen = chosen;
 	}
-
+	
+	public String getRangeName(){
+		return rangeIni+" - "+rangeEnd;
+	}
+	
 	@Override
 	public String toString() {
 		if(!range)

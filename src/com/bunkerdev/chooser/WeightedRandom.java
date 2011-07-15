@@ -13,12 +13,12 @@ public class WeightedRandom {
 	
 	String tag = "TAG";
     private HashMap<Choice, Double> choiceValues;
-    private LinkedList<Choice> choices;
+    private ArrayList<Choice> choices;
     public enum WeighingCase {ALLAI, ALLN, ALLAN, AIN, NAN, AIAN, AINAN, NOCASE};
     
     
-    public WeightedRandom(LinkedList<Choice> list){
-        choices =  (LinkedList<Choice>)list.clone();
+    public WeightedRandom(ArrayList<Choice> list){
+        choices =  (ArrayList<Choice>)list.clone();
         choiceValues = new HashMap<Choice, Double>();
     }
     

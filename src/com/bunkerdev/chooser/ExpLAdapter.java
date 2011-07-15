@@ -24,11 +24,12 @@ public class ExpLAdapter extends BaseExpandableListAdapter {
 	private static String tag = "TAG";
 	
 	
-	public ExpLAdapter(LayoutInflater inf){
+	public ExpLAdapter(ArrayList<Choice> choices, LayoutInflater inf){
 		groups = new ArrayList<LinearLayout>();
 		children = new ArrayList<LinearLayout>();
 		bars = new ArrayList<SeekBar>();
 		inflater = inf;
+		refreshChoices(choices);
 	}
 	
 	public Object getChild(int groupPosition, int childPosition) {
@@ -154,6 +155,14 @@ public class ExpLAdapter extends BaseExpandableListAdapter {
     		c.setWeight(weight);
     		
     	}
+    }
+    
+    public void refreshChoices(ArrayList<Choice> list){
+    	groups.clear();
+    	children.clear();
+		for(Choice c : list){
+			addChoiceRadioGroup(c);
+		}
     }
 
 	
