@@ -5,12 +5,14 @@ import java.io.Serializable;
 public class Choice implements Serializable, Cloneable {
 
 	private static final long serialVersionUID = -2045169531698578334L;
+
 	public enum Weighing {NEVER, ALMOSTIMPOSSIBLE, NORMAL, ABOVENORMAL};
 	
 	private Weighing weight;
 	private String name;
 	private Integer rangeIni, rangeEnd;
 	private boolean range;
+	private Integer chosen;
 	
 	public Choice(String name) {
 		this.name = name;
@@ -63,6 +65,15 @@ public class Choice implements Serializable, Cloneable {
 	public void setRangeEnd(Integer rangeEnd) {
 		this.rangeEnd = rangeEnd;
 	}
+	
+
+	public Integer getChosen() {
+		return chosen;
+	}
+
+	public void setChosen(Integer chosen) {
+		this.chosen = chosen;
+	}
 
 	@Override
 	public String toString() {
@@ -82,6 +93,21 @@ public class Choice implements Serializable, Cloneable {
 			e.printStackTrace();
 		}
 		return c;
+	}
+	
+	@Override
+	public boolean equals(Object o){
+		boolean res=false;
+		if (o instanceof Choice){
+			Choice c = (Choice)o;
+			if(range==c.isRange()){
+				if(range)
+					res = rangeIni.equals(c.getRangeIni()) && rangeEnd.equals(c.getRangeEnd());
+				else
+					res = name.equals(c.getName());
+			}
+		}
+		return res;
 	}
 	
 }
