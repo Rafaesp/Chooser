@@ -55,14 +55,21 @@
     android:layout_gravity="bottom"
     android:layout_width="fill_parent" 
     android:layout_weight="20"
-    android:weightSum="100"
+    android:weightSum="99"
     android:layout_alignParentBottom="true" 
     android:layout_height="50dp">
+    	<ImageButton
+    		android:id="@+id/star"
+	    	android:layout_width="0dp" 
+	        android:layout_height="fill_parent"
+	        android:layout_weight="20"
+	        android:background="@android:color/transparent"
+        ></ImageButton>
         <TextView 
         android:id="@+id/tvNumberChoices" 
         android:layout_width="0dp" 
         android:layout_height="fill_parent"
-        android:layout_weight="50" 
+        android:layout_weight="40" 
         android:textSize="30sp" 
         android:gravity="center" 
         android:layout_marginRight="10dp"
@@ -74,7 +81,7 @@
         android:layout_width="0dp"
         android:textSize="16sp" 
         android:layout_height="fill_parent"
-        android:layout_weight="50"
+        android:layout_weight="40"
         android:layout_marginLeft="10dp"
         >
         </Button> 
