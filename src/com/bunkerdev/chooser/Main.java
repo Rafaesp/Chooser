@@ -24,13 +24,18 @@ public class Main extends TabActivity {
 
 	    // Initialize a TabSpec for each tab and add it to the TabHost
 	    spec = tabHost.newTabSpec("list").setIndicator("List",
-	                      res.getDrawable(R.drawable.icon24px))
-	                  .setContent(intent);
+	                      res.getDrawable(R.drawable.list))
+	                      .setContent(intent);
 	    tabHost.addTab(spec);
 
 	    // Do the same for the other tabs
+	    intent = new Intent().setClass(this, Favorites.class);
+	    spec = tabHost.newTabSpec("favorites").setIndicator("Favorites",
+	    				res.getDrawable(R.drawable.gold_star_little))
+	    				.setContent(intent);
+	    tabHost.addTab(spec);
 	    
-
+	    
 	    tabHost.setCurrentTab(0);
 	    
 	}

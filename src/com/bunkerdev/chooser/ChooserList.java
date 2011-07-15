@@ -10,18 +10,18 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -84,6 +84,9 @@ public class ChooserList extends Activity{
 				resultPopup.showAtLocation(view, Gravity.CENTER_VERTICAL, 0, 0);
 			}
 		});
+        
+        ImageButton star = (ImageButton) findViewById(R.id.star);
+        star.setBackgroundResource(R.drawable.silver_star);
     }
     
     private void initializeWheel(){
