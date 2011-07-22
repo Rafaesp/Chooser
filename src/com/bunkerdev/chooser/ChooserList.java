@@ -89,7 +89,10 @@ public class ChooserList extends Activity{
 			@Override
 			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {
+				choices.remove((Choice)arg1.getTag());
 				expAdapter.remove((Choice)arg1.getTag());
+				ImageButton star = (ImageButton) findViewById(R.id.star);
+				star.setBackgroundResource(R.drawable.silver_star);
 				return false;
 			}
 		});
