@@ -1,19 +1,17 @@
 package com.bunkerdev.chooser;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-
-import com.bunkerdev.chooser.Choice.Weighing;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+
+import com.bunkerdev.chooser.Choice.Weighing;
 
 public class ExpLAdapter extends BaseExpandableListAdapter {
 	
@@ -79,6 +77,23 @@ public class ExpLAdapter extends BaseExpandableListAdapter {
 		adapterGroup.setTag(c);
 		
 		RadioGroup rg = (RadioGroup) adapterChild.findViewById(R.id.rgWeighing);
+		
+		switch (c.getWeight()) {
+		case NEVER:
+			((RadioButton)adapterChild.findViewById(R.id.rbnever)).setChecked(true);
+			break;
+		case ALMOSTIMPOSSIBLE:
+			((RadioButton)adapterChild.findViewById(R.id.rbalmostimpossible)).setChecked(true);
+			break;
+		case NORMAL:
+			((RadioButton)adapterChild.findViewById(R.id.rbnormal)).setChecked(true);
+			break;
+		case ABOVENORMAL:
+			((RadioButton)adapterChild.findViewById(R.id.rbabovenormal)).setChecked(true);
+			break;
+		default:
+			break;
+		}
 		adapterChild.setTag(rg);
 		
 		TextView choiceNameView = (TextView) adapterGroup.findViewById(R.id.choice); 
