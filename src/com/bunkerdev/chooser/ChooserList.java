@@ -347,6 +347,7 @@ public class ChooserList extends Activity{
 		}
 		favorites.put(favoriteName, choices);
 		
+		expAdapter.refreshWeighings();
 		
 		FileOutputStream fos;
 		try {
