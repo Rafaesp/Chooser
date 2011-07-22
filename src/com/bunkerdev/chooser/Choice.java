@@ -17,6 +17,7 @@ public class Choice implements Serializable, Cloneable {
 	public Choice(String name) {
 		this.name = name;
 		range = false;
+		weight = Weighing.NORMAL;
 	}
 	
 	public Choice(String name, Integer ini, Integer end) {
@@ -24,6 +25,7 @@ public class Choice implements Serializable, Cloneable {
 		rangeIni = ini;
 		rangeEnd = end;
 		range = true;
+		weight = Weighing.NORMAL;
 	}
 
 	public Weighing getWeight() {
