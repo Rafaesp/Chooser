@@ -140,5 +140,16 @@ public class ExpLAdapter extends BaseExpandableListAdapter {
 			addChoiceRadioGroup(c);
 		}
     }
+    
+    public void remove(Choice c){
+    	int i;
+    	for(i = 0; i < groups.size(); i++){
+    		if(c.equals(groups.get(i).getTag()))
+    			break;
+    	}
+    	groups.remove(i);
+    	children.remove(i);
+    	notifyDataSetChanged();
+    }
 
 }

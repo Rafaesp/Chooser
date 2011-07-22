@@ -27,6 +27,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -82,6 +84,16 @@ public class ChooserList extends Activity{
 		expAdapter = new ExpLAdapter(choices, inflater);
 		rows.setAdapter(expAdapter);
 
+		rows.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				expAdapter.remove((Choice)arg1.getTag());
+				return false;
+			}
+		});
+		
 		initializeWheel();
 		initializeCreateOption();
 		initializeResultPopup();
@@ -362,4 +374,5 @@ public class ChooserList extends Activity{
 		}catch(IOException ex){
 		}
 	}
+	
 }
