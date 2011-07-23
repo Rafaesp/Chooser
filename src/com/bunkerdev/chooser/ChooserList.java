@@ -11,6 +11,7 @@ import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Properties;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -37,6 +38,7 @@ import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -50,6 +52,9 @@ import android.widget.ViewSwitcher;
 
 import com.bunkerdev.chooser.wheel.WheelView;
 import com.bunkerdev.chooser.wheel.adapters.NumericWheelAdapter;
+import com.google.ads.AdRequest;
+import com.google.ads.AdSize;
+import com.google.ads.AdView;
 
 public class ChooserList extends Activity{
 
@@ -344,6 +349,21 @@ public class ChooserList extends Activity{
 				popupView.findViewById(R.id.wrapperAnimation).setVisibility(View.GONE);
 			}
 		};
+		
+		Properties gitSecrets = new Properties();
+		try {
+			gitSecrets.load(this.getClass().getClassLoader().getResourceAsStream("assets/GitSecrets"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		AdView adView = new AdView(this, AdSize.BANNER, gitSecrets.getProperty("ADMOB_ID"));
+		LinearLayout adLayout = (LinearLayout)popupView.findViewById(R.id.adLayout);
+		adLayout.addView(adView);
+		
+		AdRequest request = new AdRequest();
+//		request.setTesting(true);
+		adView.loadAd(request);
 		
 		WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
 		resultPopup = new PopupWindow(popupView, wm.getDefaultDisplay().getWidth(), 3*(wm.getDefaultDisplay().getHeight()/4), true);

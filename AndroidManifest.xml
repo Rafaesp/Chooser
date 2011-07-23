@@ -24,6 +24,9 @@
         	android:name=".Favorites" 
         	>
         	</activity>
-
+		 <activity android:name="com.google.ads.AdActivity"
+              android:configChanges="keyboard|keyboardHidden|orientation"/>
     </application>
+    <uses-permission android:name="android.permission.INTERNET"/>
+  	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 </manifest>
