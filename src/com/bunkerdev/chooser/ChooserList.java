@@ -11,17 +11,17 @@ import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.Editable;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,8 +43,10 @@ import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import com.bunkerdev.chooser.wheel.WheelView;
 import com.bunkerdev.chooser.wheel.adapters.NumericWheelAdapter;
@@ -66,6 +68,8 @@ public class ChooserList extends Activity{
 	private PopupWindow resultPopup;
 	private View view;
 	private boolean favorited;
+	private CountDownTimer resultCountdown;
+	private TextSwitcher txtSwitcher;
 
 	private static String tag = "TAG";
 
@@ -105,7 +109,6 @@ public class ChooserList extends Activity{
 		chooseBtn.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				//TODO
 				expAdapter.refreshWeighings();
 				WeightedRandom randGenerator= new WeightedRandom(choices);
 
@@ -115,6 +118,11 @@ public class ChooserList extends Activity{
 				ListAdapter resultAdapter = new ArrayAdapter<Choice>(getApplicationContext(), R.layout.simple_textview, chosen);
 				resultList.setAdapter(resultAdapter);
 				resultPopup.showAtLocation(view, Gravity.CENTER_VERTICAL, 0, 0);
+				
+				resultPopup.getContentView().findViewById(R.id.wrapperResult).setVisibility(View.GONE);
+				resultPopup.getContentView().findViewById(R.id.wrapperAnimation).setVisibility(View.VISIBLE);
+				txtSwitcher.setText(new String("5"));
+				resultCountdown.start();
 			}
 		});
 		
@@ -295,7 +303,7 @@ public class ChooserList extends Activity{
 	}
 
 	private void initializeResultPopup(){
-		View popupView = inflater.inflate(R.layout.result, null);
+		final View popupView = inflater.inflate(R.layout.result, null);
 		popupView.setBackgroundColor(Color.GRAY);
 		Button backBtn = (Button) popupView.findViewById(R.id.btnResultLeft);
 		backBtn.setOnClickListener(new OnClickListener() {
@@ -309,7 +317,34 @@ public class ChooserList extends Activity{
 				finish();
 			}
 		});
-
+		
+		txtSwitcher = (TextSwitcher) popupView.findViewById(R.id.resultTextSwitcher);
+		txtSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
+	        @Override
+	        public View makeView() {
+	            TextView txt = new TextView(ChooserList.this);
+	            txt.setGravity(Gravity.CENTER);
+	            txt.setTextSize(TypedValue.COMPLEX_UNIT_SP, 150);
+	            return txt;
+	        }
+	    });
+		
+		resultCountdown = new CountDownTimer(5000, 1000) {
+			
+			@Override
+			public void onTick(long millisUntilFinished) {
+					Integer before = new Integer(((TextView)txtSwitcher.getCurrentView()).getText().toString());
+					txtSwitcher.setText(before-1+"");
+			}
+			
+			@Override
+			public void onFinish() {
+				txtSwitcher.setText("0");
+				popupView.findViewById(R.id.wrapperResult).setVisibility(View.VISIBLE);
+				popupView.findViewById(R.id.wrapperAnimation).setVisibility(View.GONE);
+			}
+		};
+		
 		WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
 		resultPopup = new PopupWindow(popupView, wm.getDefaultDisplay().getWidth(), 3*(wm.getDefaultDisplay().getHeight()/4), true);
 

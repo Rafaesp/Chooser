@@ -7,6 +7,7 @@
     	android:layout_height="fill_parent" 
     	android:id="@+id/wrapperResult" 
     	android:layout_width="wrap_content"
+    	android:visibility="gone"
     	android:orientation="vertical">
         <LinearLayout 
         	android:layout_height="50dp" 
@@ -25,7 +26,7 @@
 	        	android:layout_width="wrap_content" 
 	        	android:id="@+id/titleResult" 
 	        	android:text="@string/titleResult" 
-	        	android:textSize="35dp" 
+	        	android:textSize="50sp" 
 	        	android:layout_weight="25"
 	        	android:layout_marginTop="15dp"
 	        	android:layout_marginBottom="15dp">
@@ -34,7 +35,7 @@
 	        	android:layout_height="0dp" 
 	        	android:id="@+id/resultList" 
 	        	android:layout_width="fill_parent" 
-	        	android:layout_weight="50"
+	        	android:layout_weight="55"
 	        	android:background="#ff888888"
 	        	>
 	        </ListView>
@@ -43,7 +44,7 @@
 	        	android:layout_width="fill_parent"
 	        	android:weightSum="100"
 	        	android:orientation="horizontal"
-	        	android:layout_weight="25">
+	        	android:layout_weight="20">
 	            <Button 
 	            	android:text="@string/btnResultBack" 
 	            	android:id="@+id/btnResultLeft" 
@@ -63,4 +64,19 @@
 	        </LinearLayout>
         </LinearLayout>
     </LinearLayout>
+    <RelativeLayout
+    	android:layout_height="fill_parent" 
+    	android:id="@+id/wrapperAnimation" 
+    	android:layout_width="wrap_content"
+    	android:orientation="vertical">
+        <TextSwitcher 
+        	android:layout_centerInParent="true"
+        	android:layout_width="fill_parent" 
+        	android:layout_height="wrap_content" 
+        	android:id="@+id/resultTextSwitcher" 
+        	android:inAnimation="@android:anim/fade_in"
+        	android:outAnimation="@android:anim/fade_out">
+        	</TextSwitcher>
+    	
+    </RelativeLayout>
 </LinearLayout>
