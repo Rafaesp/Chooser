@@ -120,7 +120,7 @@ public class ChooserList extends Activity{
 				ArrayList<Choice> chosen = randGenerator.getChoice(numChoices);
 				//Log.i(tag, randGenerator.doStatistics(100));	
 				ListView resultList = (ListView) resultPopup.getContentView().findViewById(R.id.resultList);
-				ListAdapter resultAdapter = new ArrayAdapter<Choice>(getApplicationContext(), R.layout.simple_textview, chosen);
+				ListAdapter resultAdapter = new ArrayAdapter<Choice>(getApplicationContext(), R.layout.simple_textview_grey, chosen);
 				resultList.setAdapter(resultAdapter);
 				resultPopup.showAtLocation(view, Gravity.CENTER_VERTICAL, 0, 0);
 				
@@ -230,7 +230,16 @@ public class ChooserList extends Activity{
 					EditText opNameView = (EditText) createOptionDialog.findViewById(R.id.optionName);
 					Editable nameEdit = opNameView.getText();
 					nameEdit.clearSpans();
-					c = new Choice(nameEdit.toString());
+					
+					String choiceName = nameEdit.toString();
+					int contains = 1;
+					String nameBackup = nameEdit.toString();
+					while(choices.contains(new Choice(choiceName))){
+						choiceName = nameBackup + " ("+contains+")";
+						contains++;
+					}
+					
+					c = new Choice(choiceName);
 					choices.add(c);
 					star.setBackgroundResource(R.drawable.silver_star);
 					favorited = false;
@@ -249,6 +258,12 @@ public class ChooserList extends Activity{
 							t.show();
 						}else{
 							String name = getText(R.string.rangeName1)+" "+rIni+" "+getText(R.string.rangeName2)+" "+rEnd;
+							int contains2 = 1;
+							String nameBackup2 = name;
+							while(choices.contains(new Choice(name, rIni, rEnd))){
+								name = nameBackup2 + " ("+contains2+")";
+								contains2++;
+							}
 							c = new Choice(name, rIni, rEnd);
 							choices.add(c);
 							star.setBackgroundResource(R.drawable.silver_star);

@@ -108,7 +108,7 @@ public class Choice implements Serializable, Cloneable {
 			Choice c = (Choice)o;
 			if(range==c.isRange()){
 				if(range)
-					res = rangeIni.equals(c.getRangeIni()) && rangeEnd.equals(c.getRangeEnd());
+					res = name.equals(c.getName()) && rangeIni.equals(c.getRangeIni()) && rangeEnd.equals(c.getRangeEnd());
 				else
 					res = name.equals(c.getName());
 			}
