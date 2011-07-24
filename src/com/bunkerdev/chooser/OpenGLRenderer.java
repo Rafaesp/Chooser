@@ -16,6 +16,8 @@ public class OpenGLRenderer implements Renderer {
 
 	private Square square;
 	private Triforce triforce;
+	private Circle circle;
+	private float angle;
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		// Set the background color to black ( rgba ).
@@ -33,6 +35,8 @@ public class OpenGLRenderer implements Renderer {
 		
 		square = new Square();
 		triforce = new Triforce();
+		circle = new Circle(3f);
+		angle = 0f;
 	
 	}
 
@@ -58,9 +62,12 @@ public class OpenGLRenderer implements Renderer {
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		gl.glLoadIdentity();
 		gl.glTranslatef(0, 0, -15);
-//		square.draw(gl);
-		triforce.draw(gl);
+		
+		circle.draw(gl);
+		
+		angle++;
 	}
+
 	
 	public class Square {
 		// Our vertices.
@@ -169,6 +176,54 @@ public class OpenGLRenderer implements Renderer {
 			gl.glDisable(GL10.GL_CULL_FACE);
 		}
 	
+	}
+	
+	public class Circle{
+		
+		private float vertices[] = new float[722];
+		private short indices[];
+		private FloatBuffer vertexBuffer;
+		private ShortBuffer indexBuffer;
+		
+		public Circle(float radius){
+			
+			vertices[0] = 0f;
+			vertices[1] = 0f;
+			for (int i = 0; i < 720; i += 2) {
+			    vertices[i+2]  = Double.valueOf(Math.cos(Math.PI*i/2*180) * radius).floatValue();
+			    vertices[i+3] = Double.valueOf(Math.sin(Math.PI*i/2*180) * radius).floatValue();
+			}
+			vertices[719] = 0f;
+			vertices[720] = 1f;
+			
+			ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * 4);
+			vbb.order(ByteOrder.nativeOrder());
+			vertexBuffer = vbb.asFloatBuffer();
+			vertexBuffer.put(vertices);
+			vertexBuffer.position(0);
+			
+//			ByteBuffer ibb = ByteBuffer.allocateDirect(indices.length * 2);
+//			ibb.order(ByteOrder.nativeOrder());
+//			indexBuffer = ibb.asShortBuffer();
+//			indexBuffer.put(indices);
+//			indexBuffer.position(0);
+		}
+		
+		public Circle(){
+			this(1);
+		}
+		
+		public void draw(GL10 gl){
+			gl.glFrontFace(GL10.GL_CCW);
+			gl.glEnable(GL10.GL_CULL_FACE);
+			gl.glCullFace(GL10.GL_BACK);
+			gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+			gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertexBuffer);
+			gl.glDrawArrays(GL10.GL_TRIANGLE_FAN, 0, 361);
+			gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+			gl.glDisable(GL10.GL_CULL_FACE);
+		}
+		
 	}
 }
 
