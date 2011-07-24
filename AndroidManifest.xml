@@ -23,7 +23,7 @@
         	android:name=".Favorites" 
         ></activity>
         <activity 
-        	android:name=".Favorites" 
+        	android:name=".WheelPosition" 
         ></activity>
         
 		 <activity android:name="com.google.ads.AdActivity"
