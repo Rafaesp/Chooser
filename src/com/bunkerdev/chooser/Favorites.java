@@ -46,7 +46,6 @@ public class Favorites extends ListActivity {
 		AlertDialog.Builder builder = new Builder(this);
 		builder.setItems(R.array.favoritesSelectionDialog, new DialogInterface.OnClickListener() {
 			
-			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				switch (which) {
 				case 0:
@@ -67,7 +66,6 @@ public class Favorites extends ListActivity {
 		
 		getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
 
-			@Override
 			public boolean onItemLongClick(AdapterView<?> arg0, View v,
 					int arg2, long arg3) {
 				keyClicked = ((TextView)v).getText().toString();
@@ -93,14 +91,12 @@ public class Favorites extends ListActivity {
 		builder.setTitle(R.string.editNameTitle);
 		builder.setNegativeButton(R.string.btnCancel, new OnClickListener() {
 			
-			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				editDialog.dismiss();
 			}
 		});
 		builder.setPositiveButton(R.string.confirmButton, new OnClickListener() {
 			
-			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				String editedName = ((EditText)editDialog.findViewById(R.id.editName)).getText().toString();
 				

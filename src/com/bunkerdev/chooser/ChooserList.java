@@ -96,7 +96,6 @@ public class ChooserList extends Activity{
 
 		rows.setOnItemLongClickListener(new OnItemLongClickListener() {
 
-			@Override
 			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {
 				choices.remove((Choice)arg1.getTag());
@@ -342,7 +341,6 @@ public class ChooserList extends Activity{
 		
 		txtSwitcher = (TextSwitcher) popupView.findViewById(R.id.resultTextSwitcher);
 		txtSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
-	        @Override
 	        public View makeView() {
 	            TextView txt = new TextView(ChooserList.this);
 	            txt.setGravity(Gravity.CENTER);
