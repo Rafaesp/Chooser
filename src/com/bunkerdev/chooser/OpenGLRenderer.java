@@ -4,20 +4,23 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
+import java.util.LinkedList;
 
 import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL;
 import javax.microedition.khronos.opengles.GL10;
 
+import android.graphics.Bitmap;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
+import android.opengl.GLUtils;
+import android.util.Log;
 
 public class OpenGLRenderer implements Renderer {
 
-	private Square square;
-	private Triforce triforce;
-	private Circle circle;
-	private float angle;
+	private LinkedList<TexturizedSquare> squares =new LinkedList<OpenGLRenderer.TexturizedSquare>();
+	private int textureId = -1;
+	private int angle = 0;
+	
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		// Set the background color to black ( rgba ).
 		gl.glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
@@ -31,15 +34,10 @@ public class OpenGLRenderer implements Renderer {
 		gl.glDepthFunc(GL10.GL_LEQUAL);
 		// Really nice perspective calculations.
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
-		
-		square = new Square();
-		triforce = new Triforce();
-		circle = new Circle(3f);
-		angle = 0f;
-	
 	}
 
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
+		Log.i("TAG", "w: "+width+" h: "+height);
 		// Sets the current view port to the new size.
 		gl.glViewport(0, 0, width, height);
 		// Select the projection matrix
@@ -58,15 +56,38 @@ public class OpenGLRenderer implements Renderer {
 	public void onDrawFrame(GL10 gl) {
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		gl.glLoadIdentity();
-		gl.glTranslatef(0, 0, -15);
-		
-		circle.draw(gl);
-		
-		angle++;
+		gl.glTranslatef(0, 0, -5);
+		int x = -2;
+		int y = -2;
+		if(!squares.isEmpty()){
+			for(int i = 0; i<squares.size(); ++i){
+				if(x>2){
+					x=-2;
+					y++;
+				}
+				if(y>2) y=-2;
+				gl.glPushMatrix();
+				gl.glTranslatef((float)x, (float)y, 0f);
+				gl.glScalef(.5f, .5f, 0f);
+				gl.glRotatef(angle*10f, 0f, 0f, 1f);
+				squares.get(i).draw(gl);
+				gl.glPopMatrix();
+				x++;
+			}
+			angle++;
+		}
+	}
+	
+	public void addSquare(TexturizedSquare s){
+		squares.add(s);
 	}
 
 	
-	public class Square {
+	public class TexturizedSquare {
+		
+		private Bitmap bitmap;
+		private boolean shouldLoadTexture;
+		
 		// Our vertices.
 		private float vertices[] = {
 			      -1.0f,  1.0f, 0.0f,  // 0, Top Left
@@ -77,14 +98,21 @@ public class OpenGLRenderer implements Renderer {
 
 		// The order we like to connect them.
 		private short[] indices = { 0, 1, 2, 0, 2, 3 };
+		
+		private float textureCoords[] = {0.0f, 0.0f,
+                						 0.0f, 1.0f,
+                						 1.0f, 1.0f,
+                						 1.0f, 0.0f };
 
 		// Our vertex buffer.
 		private FloatBuffer vertexBuffer;
 
 		// Our index buffer.
 		private ShortBuffer indexBuffer;
+		
+		private FloatBuffer textureBuffer;
 
-		public Square() {
+		public TexturizedSquare(Bitmap bmp) {
 			// a float is 4 bytes, therefore we multiply the number if
 			// vertices with 4.
 			ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * 4);
@@ -100,6 +128,16 @@ public class OpenGLRenderer implements Renderer {
 			indexBuffer = ibb.asShortBuffer();
 			indexBuffer.put(indices);
 			indexBuffer.position(0);
+			
+			ByteBuffer byteBuf = ByteBuffer.allocateDirect(
+                    textureCoords.length * 4);
+			byteBuf.order(ByteOrder.nativeOrder());
+			textureBuffer = byteBuf.asFloatBuffer();
+			textureBuffer.put(textureCoords);
+			textureBuffer.position(0);
+			
+			bitmap = bmp;
+			shouldLoadTexture = true;
 		}
 
 		/**
@@ -107,28 +145,66 @@ public class OpenGLRenderer implements Renderer {
 		 * @param gl
 		 */
 		public void draw(GL10 gl) {
-			// Counter-clockwise winding.
-			gl.glFrontFace(GL10.GL_CCW); // OpenGL docs
-			// Enable face culling.
-			gl.glEnable(GL10.GL_CULL_FACE); // OpenGL docs
-			// What faces to remove with the face culling.
-			gl.glCullFace(GL10.GL_BACK); // OpenGL docs
+            // Counter-clockwise winding.
+            gl.glFrontFace(GL10.GL_CCW);
+            // Enable face culling.
+            gl.glEnable(GL10.GL_CULL_FACE);
+            // What faces to remove with the face culling.
+            gl.glCullFace(GL10.GL_BACK);
+            // Enabled the vertices buffer for writing and to be used during
+            // rendering.
+            gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+            // Specifies the location and data format of an array of vertex
+            // coordinates to use when rendering.
+            gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
 
-			// Enabled the vertices buffer for writing and to be used during
-			// rendering.
-			gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);// OpenGL docs.
-			// Specifies the location and data format of an array of vertex
-			// coordinates to use when rendering.
-			gl.glVertexPointer(3, GL10.GL_FLOAT, 0, // OpenGL docs
-	                                 vertexBuffer);
+            if (shouldLoadTexture) {
+                    loadGLTexture(gl);
+                    shouldLoadTexture = false;
+            }
+            gl.glEnable(GL10.GL_TEXTURE_2D);
+            // Enable the texture state
+            gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+            // Point to our buffers
+            gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
+            gl.glBindTexture(GL10.GL_TEXTURE_2D, textureId);
 
-			gl.glDrawElements(GL10.GL_TRIANGLES, indices.length,// OpenGL docs
-					  GL10.GL_UNSIGNED_SHORT, indexBuffer);
+            // Point out the where the color buffer is.
+            gl.glDrawElements(GL10.GL_TRIANGLES, indices.length,
+                            GL10.GL_UNSIGNED_SHORT, indexBuffer);
+            // Disable the vertices buffer.
+            gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 
-			// Disable the vertices buffer.
-			gl.glDisableClientState(GL10.GL_VERTEX_ARRAY); // OpenGL docs
-			// Disable face culling.
-			gl.glDisable(GL10.GL_CULL_FACE); // OpenGL docs
+            gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+
+            // Disable face culling.
+            gl.glDisable(GL10.GL_CULL_FACE);
+		}
+		
+		private void loadGLTexture(GL10 gl) { // New function
+            // Generate one texture pointer...
+            int[] textures = new int[1];
+            gl.glGenTextures(1, textures, 0);
+            textureId = textures[0];
+
+            // ...and bind it to our array
+            gl.glBindTexture(GL10.GL_TEXTURE_2D, textureId);
+
+            // Create Nearest Filtered Texture
+            gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER,
+                            GL10.GL_LINEAR);
+            gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER,
+                            GL10.GL_LINEAR);
+
+            // Different possible texture parameters, e.g. GL10.GL_CLAMP_TO_EDGE
+            gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S,
+                            GL10.GL_CLAMP_TO_EDGE);
+            gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T,
+                            GL10.GL_REPEAT);
+
+            // Use the Android GLUtils to specify a two-dimensional texture image
+            // from our bitmap
+            GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
 		}
 
 	}
@@ -172,7 +248,6 @@ public class OpenGLRenderer implements Renderer {
 			gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 			gl.glDisable(GL10.GL_CULL_FACE);
 		}
-	
 	}
 	
 	public class Circle{
