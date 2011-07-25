@@ -20,6 +20,8 @@ public class OpenGLRenderer implements Renderer {
 	private LinkedList<TexturizedSquare> squares =new LinkedList<OpenGLRenderer.TexturizedSquare>();
 	private int textureId = -1;
 	private int angle = 0;
+	private int width;
+	private int height;
 	
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		// Set the background color to black ( rgba ).
@@ -36,16 +38,22 @@ public class OpenGLRenderer implements Renderer {
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
 	}
 
-	public void onSurfaceChanged(GL10 gl, int width, int height) {
-		Log.i("TAG", "w: "+width+" h: "+height);
+	public void onSurfaceChanged(GL10 gl, int w, int h) {
+		width = w;
+		height = h;
 		// Sets the current view port to the new size.
 		gl.glViewport(0, 0, width, height);
 		// Select the projection matrix
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		// Reset the projection matrix
 		gl.glLoadIdentity();
+		//Poniendolo en ortogonal
+		//left, right, bottom, top, near, far
+		gl.glOrthof(-5f, 5f, -5f, 5f, -1, 1);
+//		gl.glOrthof(-1.0f, 1.0f, -1.0f / (width / height), 
+//				1.0f / (width / height), 0.01f, 10000.0f);   
 		// Calculate the aspect ratio of the window
-		GLU.gluPerspective(gl, 45.0f, (float) width / (float) height, 0.1f, 100.0f);
+//		GLU.gluPerspective(gl, 45.0f, (float) width / (float) height, 0.1f, 100.0f);
 		// Select the modelview matrix
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		// Reset the modelview matrix
@@ -56,23 +64,17 @@ public class OpenGLRenderer implements Renderer {
 	public void onDrawFrame(GL10 gl) {
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		gl.glLoadIdentity();
-		gl.glTranslatef(0, 0, -5);
-		int x = -2;
-		int y = -2;
 		if(!squares.isEmpty()){
-			for(int i = 0; i<squares.size(); ++i){
-				if(x>2){
-					x=-2;
-					y++;
+			int i = 0;
+			for(int y=-4; y<=4; y+=2){
+				for(int x=-4; x<=4; x+=2){
+					gl.glPushMatrix();
+					gl.glTranslatef((float)x, (float)y, 0f);
+					gl.glRotatef(angle*10f, 0f, 0f, 1f);
+					squares.get(i).draw(gl);
+					gl.glPopMatrix();
+					i++;
 				}
-				if(y>2) y=-2;
-				gl.glPushMatrix();
-				gl.glTranslatef((float)x, (float)y, 0f);
-				gl.glScalef(.5f, .5f, 0f);
-				gl.glRotatef(angle*10f, 0f, 0f, 1f);
-				squares.get(i).draw(gl);
-				gl.glPopMatrix();
-				x++;
 			}
 			angle++;
 		}
