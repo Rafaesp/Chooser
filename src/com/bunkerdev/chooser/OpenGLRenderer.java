@@ -18,7 +18,6 @@ public class OpenGLRenderer implements Renderer {
 	private Triforce triforce;
 	private Circle circle;
 	private float angle;
-	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		// Set the background color to black ( rgba ).
 		gl.glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
@@ -40,7 +39,6 @@ public class OpenGLRenderer implements Renderer {
 	
 	}
 
-	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
 		// Sets the current view port to the new size.
 		gl.glViewport(0, 0, width, height);
@@ -57,7 +55,6 @@ public class OpenGLRenderer implements Renderer {
 	
 	}
 
-	@Override
 	public void onDrawFrame(GL10 gl) {
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		gl.glLoadIdentity();
