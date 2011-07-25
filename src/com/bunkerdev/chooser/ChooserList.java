@@ -50,6 +50,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
+import com.bunkerdev.chooser.Choice.Weighing;
 import com.bunkerdev.chooser.wheel.WheelView;
 import com.bunkerdev.chooser.wheel.adapters.NumericWheelAdapter;
 import com.google.ads.AdRequest;
@@ -95,7 +96,6 @@ public class ChooserList extends Activity{
 
 		rows.setOnItemLongClickListener(new OnItemLongClickListener() {
 
-			@Override
 			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {
 				choices.remove((Choice)arg1.getTag());
@@ -114,7 +114,12 @@ public class ChooserList extends Activity{
 		chooseBtn.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				expAdapter.refreshWeighings();
+				int maxChoices = getMaxChoices();
+				if(numChoices > maxChoices){
+					numChoices = maxChoices;
+					((TextView)findViewById(R.id.tvNumberChoices)).setText(maxChoices+"");
+				}
+					
 				WeightedRandom randGenerator= new WeightedRandom(choices);
 
 				ArrayList<Choice> chosen = randGenerator.getChoice(numChoices);
@@ -165,9 +170,6 @@ public class ChooserList extends Activity{
 		AlertDialog.Builder builder = new Builder(this);
 
 		wheel = (WheelView) wheelLayout.findViewById(R.id.wheel);
-
-		final NumericWheelAdapter numChoicesAdapter = new NumericWheelAdapter(this);
-		wheel.setViewAdapter(numChoicesAdapter);
 		wheel.setCyclic(false);
 		wheel.setVisibleItems(3);
 
@@ -188,12 +190,11 @@ public class ChooserList extends Activity{
 		numChoices = 1;
 		numChoicesView.setText(1+"");
 
-		((NumericWheelAdapter)wheel.getViewAdapter()).setMaxValue(choices.size());
-
+		wheel.setViewAdapter(new NumericWheelAdapter(ChooserList.this, 0, getMaxChoices()));
 		numChoicesView.setOnClickListener(new OnClickListener() { 
 
 			public void onClick(View v) {
-				((NumericWheelAdapter)wheel.getViewAdapter()).setMaxValue(choices.size());
+				wheel.setViewAdapter(new NumericWheelAdapter(ChooserList.this, 0, getMaxChoices()));
 				wheelDialog.show();	
 			}
 		});
@@ -340,7 +341,6 @@ public class ChooserList extends Activity{
 		
 		txtSwitcher = (TextSwitcher) popupView.findViewById(R.id.resultTextSwitcher);
 		txtSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
-	        @Override
 	        public View makeView() {
 	            TextView txt = new TextView(ChooserList.this);
 	            txt.setGravity(Gravity.CENTER);
@@ -385,6 +385,18 @@ public class ChooserList extends Activity{
 
 	}
 
+	private int getMaxChoices() {
+		int num = 0;
+		expAdapter.refreshWeighings();
+		for(Choice c : choices){
+			if(c.getWeight() != Weighing.NEVER)
+				num++;
+		}
+			
+		return num;
+	}
+
+	@SuppressWarnings("unchecked")
 	private void saveFavorite(){
 		HashMap<String, ArrayList<Choice>> favorites = new HashMap<String, ArrayList<Choice>>();
 		

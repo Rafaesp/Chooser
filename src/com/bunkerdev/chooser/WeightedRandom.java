@@ -86,19 +86,18 @@ public class WeightedRandom {
     private void updateWeighingValues(){
         HashMap<Weighing, Double> weighingValues = new HashMap<Weighing, Double>();
     	WeighingCase wc = getWeighingCase();
-    	Double numChoices = ((Integer)choices.size()).doubleValue();
     	
         //TODO: get these values from SharedPreferences
     	Double ALLSAME = 1.0;
-        Double AIN_AI = 0.05 * numChoices;
-        Double AIN_N = 0.95 * numChoices;
-        Double AIAN_AI = 0.01 * numChoices;
-        Double AIAN_AN = 0.99 * numChoices;
-        Double NAN_N = 0.4 * numChoices;
-        Double NAN_AN = 0.6 * numChoices;
-        Double AINAN_AI = 0.04 * numChoices;
-        Double AINAN_N = 0.38 * numChoices;
-        Double AINAN_AN = 0.58 * numChoices;
+        Double AIN_AI = 0.05;
+        Double AIN_N = 0.95;
+        Double AIAN_AI = 0.01;
+        Double AIAN_AN = 0.99;
+        Double NAN_N = 0.4;
+        Double NAN_AN = 0.6;
+        Double AINAN_AI = 0.04;
+        Double AINAN_N = 0.38;
+        Double AINAN_AN = 0.58;
 
         switch(wc){
 	        case ALLAI:
@@ -129,11 +128,12 @@ public class WeightedRandom {
             break;
             case  NOCASE:
             	Log.i(tag, "NOCASE on switch of method updateWeighing");
-                //TODO: Exception ?? Toast ??
             break;
             default:
             break;
         }
+        
+        weighingValues.put(Weighing.NEVER, 0.0);
         
         for(Choice c : choices)
         	choiceValues.put(c, weighingValues.get(c.getWeight()));
