@@ -19,9 +19,13 @@ public class OpenGLRenderer implements Renderer {
 
 	private LinkedList<TexturizedSquare> squares =new LinkedList<OpenGLRenderer.TexturizedSquare>();
 	private int textureId = -1;
-	private int angle = 0;
+	private Bitmap bmp;
 	private int width;
 	private int height;
+	
+	public OpenGLRenderer(Bitmap b){
+		bmp = b;
+	}
 	
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		// Set the background color to black ( rgba ).
@@ -49,9 +53,7 @@ public class OpenGLRenderer implements Renderer {
 		gl.glLoadIdentity();
 		//Poniendolo en ortogonal
 		//left, right, bottom, top, near, far
-		gl.glOrthof(-5f, 5f, -5f, 5f, -1, 1);
-//		gl.glOrthof(-1.0f, 1.0f, -1.0f / (width / height), 
-//				1.0f / (width / height), 0.01f, 10000.0f);   
+		gl.glOrthof(0, w, -0, h, -1, 1);
 		// Calculate the aspect ratio of the window
 //		GLU.gluPerspective(gl, 45.0f, (float) width / (float) height, 0.1f, 100.0f);
 		// Select the modelview matrix
@@ -64,38 +66,38 @@ public class OpenGLRenderer implements Renderer {
 	public void onDrawFrame(GL10 gl) {
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		gl.glLoadIdentity();
-		if(!squares.isEmpty()){
-			int i = 0;
-			for(int y=-4; y<=4; y+=2){
-				for(int x=-4; x<=4; x+=2){
-					gl.glPushMatrix();
-					gl.glTranslatef((float)x, (float)y, 0f);
-					gl.glRotatef(angle*10f, 0f, 0f, 1f);
-					squares.get(i).draw(gl);
-					gl.glPopMatrix();
-					i++;
-				}
-			}
-			angle++;
+		synchronized (squares) {
+			for(TexturizedSquare s : squares)
+				s.draw(gl);
 		}
 	}
 	
 	public void addSquare(TexturizedSquare s){
 		squares.add(s);
 	}
+	
+	public void click(float x, float y){
+		//x e y calculado porque android y opengl tienen distinto eje de coordenadas
+		synchronized (squares) {
+			squares.add(new TexturizedSquare(bmp, x, height-y));
+		}
+	}
 
 	
 	public class TexturizedSquare {
 		
 		private Bitmap bitmap;
+		private int angle = 0;
 		private boolean shouldLoadTexture;
+		private float x,y;
+		private float side = 50f;
 		
 		// Our vertices.
 		private float vertices[] = {
-			      -1.0f,  1.0f, 0.0f,  // 0, Top Left
-			      -1.0f, -1.0f, 0.0f,  // 1, Bottom Left
-			       1.0f, -1.0f, 0.0f,  // 2, Bottom Right
-			       1.0f,  1.0f, 0.0f,  // 3, Top Right
+			      -0.5f,  0.5f, 0.0f,  // 0, Top Left
+			      -0.5f, -0.5f, 0.0f,  // 1, Bottom Left
+			       0.5f, -0.5f, 0.0f,  // 2, Bottom Right
+			       0.5f,  0.5f, 0.0f,  // 3, Top Right
 			};
 
 		// The order we like to connect them.
@@ -114,7 +116,9 @@ public class OpenGLRenderer implements Renderer {
 		
 		private FloatBuffer textureBuffer;
 
-		public TexturizedSquare(Bitmap bmp) {
+		public TexturizedSquare(Bitmap bmp, float x, float y) {
+			this.x=x;
+			this.y=y;
 			// a float is 4 bytes, therefore we multiply the number if
 			// vertices with 4.
 			ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * 4);
@@ -172,8 +176,16 @@ public class OpenGLRenderer implements Renderer {
             gl.glBindTexture(GL10.GL_TEXTURE_2D, textureId);
 
             // Point out the where the color buffer is.
+			gl.glPushMatrix();
+			gl.glTranslatef(x, y, 0f);
+			gl.glRotatef(angle*10, 0f, 0f, 1f);
+			angle++;
+			gl.glScalef(side, side, 0f);
             gl.glDrawElements(GL10.GL_TRIANGLES, indices.length,
-                            GL10.GL_UNSIGNED_SHORT, indexBuffer);
+                    GL10.GL_UNSIGNED_SHORT, indexBuffer);
+			gl.glPopMatrix();
+			
+
             // Disable the vertices buffer.
             gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 
@@ -245,8 +257,6 @@ public class OpenGLRenderer implements Renderer {
 			gl.glCullFace(GL10.GL_BACK);
 			gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 			gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
-			gl.glDrawElements(GL10.GL_TRIANGLES, indices.length, 
-					GL10.GL_UNSIGNED_SHORT,	indexBuffer);
 			gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 			gl.glDisable(GL10.GL_CULL_FACE);
 		}
