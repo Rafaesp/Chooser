@@ -22,6 +22,11 @@ public class OpenGLRenderer implements Renderer {
 	private Bitmap bmp;
 	private int width;
 	private int height;
+	private int lastFrameDraw;
+	private int frameSampleTime;
+	private int frameSamplesCollected;
+	private int fps;
+	private long now;
 	
 	public OpenGLRenderer(Bitmap b){
 		bmp = b;
@@ -67,8 +72,22 @@ public class OpenGLRenderer implements Renderer {
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		gl.glLoadIdentity();
 		synchronized (squares) {
-			for(TexturizedSquare s : squares)
+			for(TexturizedSquare s : squares){
 				s.draw(gl);
+			}
+			now = System.currentTimeMillis();
+			if (lastFrameDraw != 0) {
+				int time = (int) (now - lastFrameDraw);
+				frameSampleTime += time;
+				frameSamplesCollected++;
+				if (frameSamplesCollected == 10) {
+					fps = (int) (10000 / frameSampleTime);
+					frameSampleTime = 0;
+					frameSamplesCollected = 0;
+					Log.i("TAG", fps + " fps "+"size "+squares.size());
+				}
+			}
+			lastFrameDraw = (int) now;
 		}
 	}
 	
@@ -119,6 +138,9 @@ public class OpenGLRenderer implements Renderer {
 		public TexturizedSquare(Bitmap bmp, float x, float y) {
 			this.x=x;
 			this.y=y;
+			
+			bitmap = bmp.copy(Bitmap.Config.RGB_565, false);
+			shouldLoadTexture = true;
 			// a float is 4 bytes, therefore we multiply the number if
 			// vertices with 4.
 			ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * 4);
@@ -141,9 +163,6 @@ public class OpenGLRenderer implements Renderer {
 			textureBuffer = byteBuf.asFloatBuffer();
 			textureBuffer.put(textureCoords);
 			textureBuffer.position(0);
-			
-			bitmap = bmp;
-			shouldLoadTexture = true;
 		}
 
 		/**
