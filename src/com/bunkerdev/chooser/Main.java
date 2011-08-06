@@ -6,11 +6,11 @@ import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TabHost;
 
 public class Main extends TabActivity {
 	
-	private Intent intent;
 	private TabHost tabHost;
 	private ArrayList<Choice> aux;
 	
@@ -62,6 +62,11 @@ public class Main extends TabActivity {
 
 	public void setAux(ArrayList<Choice> aux) {
 		this.aux = aux;
+	}
+	
+	public static void debug(String format, Object... args){
+		String s = String.format(format, args);
+		Log.i("TAG", s);
 	}
 }
 
