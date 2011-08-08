@@ -10,6 +10,8 @@ public class Token implements GLDrawable{
 	private Choice choice;
 	private GLBitmap glBitmap;
 	
+	public Token(){}
+	
 	public Token(Choice c, Bitmap bmap, float x, float y) {
 		this(c, bmap, x, y, 50f, 50f);
 		
@@ -17,7 +19,11 @@ public class Token implements GLDrawable{
 	public Token(Choice c, Bitmap bmap, float x, float y, float w, float h) {
 		glBitmap = new GLBitmap(bmap, x, y, w, h);
 		choice = c;
-		angle = Math.atan((OpenGLRenderer.CENTER[1] - y)/(OpenGLRenderer.CENTER[0] - x));
+		angle = Math.atan2(y - OpenGLRenderer.CENTER[1], x - OpenGLRenderer.CENTER[0])*180/Math.PI;
+		if(angle < 0){
+			angle = 360 - Math.abs(angle);
+		}
+//		Main.debug("Token angle: %f", angle);
 		c.setName(angle+"");
 	}
 	

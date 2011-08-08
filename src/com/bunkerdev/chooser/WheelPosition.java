@@ -3,6 +3,7 @@ package com.bunkerdev.chooser;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PointF;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,15 +26,18 @@ public class WheelPosition extends Activity implements OnTouchListener{
 				R.drawable.circle);
 		Bitmap needle = BitmapFactory.decodeResource(getResources(),
 				R.drawable.needle);
-		renderer = new OpenGLRenderer(mole, needle, bg);
+		renderer = new OpenGLRenderer(view, mole, needle, bg);
 		view.setRenderer(renderer);
+		view.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 		view.setOnTouchListener(this);
 		setContentView(view);
 	}
 
 	public boolean onTouch(View v, MotionEvent event) {
 		if((event.getAction() & 255) == MotionEvent.ACTION_UP){
-			renderer.click(event);
+			renderer.actionUp(event);
+		}else if((event.getAction() & 255) == MotionEvent.ACTION_DOWN){
+			renderer.actionDown(new PointF(event.getX(), event.getY()));
 		}
 		return true;
 	}

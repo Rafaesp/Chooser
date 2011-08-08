@@ -186,6 +186,8 @@ public class GLBitmap implements GLDrawable{
 		gl.glTranslatef(x, y, 0f);
 		gl.glRotatef((float) angle, 0f, 0f, 1f);
 		angle += rotAngle;
+		if(angle+rotAngle > 360.0)
+			angle -= 360.0;
 		gl.glScalef(width, height, 0f);
 		gl.glDrawElements(GL10.GL_TRIANGLES, indices.length,
 				GL10.GL_UNSIGNED_SHORT, indexBuffer);

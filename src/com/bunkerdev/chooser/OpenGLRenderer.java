@@ -2,25 +2,36 @@ package com.bunkerdev.chooser;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
+import android.graphics.PointF;
+import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
+import android.os.CountDownTimer;
 import android.view.MotionEvent;
 
 public class OpenGLRenderer implements Renderer {
 
-	private LinkedList<GLDrawable> drawables = new LinkedList<GLDrawable>();
+	private GLSurfaceView view;
+	private LinkedList<Token> tokens = new LinkedList<Token>();
 	private ArrayList<Choice> choices = new ArrayList<Choice>();
+	private GLBitmap needle;
+	private GLBitmap circle;
+	private GLBitmap lastNearest;
 	private Bitmap tokenBmp;
 	private Bitmap bgBmp;
 	private Bitmap needleBmp;
 	private int width;
 	private int height;
 	public static double[] CENTER;
+	private PointF pointDown;
+	private CountDownTimer countdownTimer;
 
 	private int lastFrameDraw = 0;
 	private int frameSampleTime = 0;
@@ -28,12 +39,14 @@ public class OpenGLRenderer implements Renderer {
 	private int fps = 0;
 	private long now = 0l;
 
-	public OpenGLRenderer(Bitmap t, Bitmap n, Bitmap bg) {
+	public OpenGLRenderer(GLSurfaceView v, Bitmap t, Bitmap n, Bitmap bg) {
+		view = v;
 		tokenBmp = t;
 		bgBmp = bg.copy(Config.RGB_565, false);
 		needleBmp = n.copy(Config.ARGB_4444, false);
 
 		CENTER = new double[2];
+		initializeCountdown();
 	}
 
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
@@ -56,13 +69,10 @@ public class OpenGLRenderer implements Renderer {
 		height = h;
 		CENTER[0] = (double) width / 2;
 		CENTER[1] = (double) height / 2;
-		GLBitmap circle = new GLBitmap(bgBmp, width / 2, height / 2, width,
-				width);
-		drawables.add(circle);
-		GLBitmap needle = new GLBitmap(needleBmp, width / 2, height / 2, width,
-				width);
-		needle.setRotAngle(10.0);
-		drawables.add(needle);
+		circle = new GLBitmap(bgBmp, width / 2, height / 2, width, width);
+		needle = new GLBitmap(needleBmp, width / 2, height / 2, width, width);
+		needle.setAngle(0);
+		// needle.setRotAngle(10);
 		// Sets the current view port to the new size.
 		gl.glViewport(0, 0, width, height);
 		// Select the projection matrix
@@ -85,47 +95,108 @@ public class OpenGLRenderer implements Renderer {
 	public void onDrawFrame(GL10 gl) {
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		gl.glLoadIdentity();
-		synchronized (drawables) {
-			for (GLDrawable d : drawables) {
+		circle.draw(gl);
+		needle.draw(gl);
+		synchronized (tokens) {
+			for (Token d : tokens) {
 				d.draw(gl);
 			}
 		}
-//		long now = System.currentTimeMillis();
-//		if (lastFrameDraw != 0) {
-//			int time = (int) (now - lastFrameDraw);
-//			frameSampleTime += time;
-//			frameSamplesCollected++;
-//			if (frameSamplesCollected == 10) {
-//				fps = (int) (10000 / frameSampleTime);
-//				Main.debug("fps: %d   size: %d", fps, drawables.size());
-//				frameSampleTime = 0;
-//				frameSamplesCollected = 0;
-//			}
-//		}
-//		lastFrameDraw = (int) now;
+		// long now = System.currentTimeMillis();
+		// if (lastFrameDraw != 0) {
+		// int time = (int) (now - lastFrameDraw);
+		// frameSampleTime += time;
+		// frameSamplesCollected++;
+		// if (frameSamplesCollected == 10) {
+		// fps = (int) (10000 / frameSampleTime);
+		// Main.debug("fps: %d   size: %d", fps, tokens.size());
+		// frameSampleTime = 0;
+		// frameSamplesCollected = 0;
+		// }
+		// }
+		// lastFrameDraw = (int) now;
 	}
 
-	public void addDrawable(GLDrawable d) {
-		synchronized (drawables) {
-			drawables.add(d);
-		}
-	}
+	// public void addDrawable(GLDrawable d) {
+	// synchronized (drawables) {
+	// drawables.add(d);
+	// }
+	// }
 
 	public void addToken(float x, float y) {
 		// x e y calculado porque android y opengl tienen distinto eje de
 		// coordenadas
 		Choice c = new Choice("");
 		choices.add(c);
-		synchronized (drawables) {
-			drawables.add(new Token(c, tokenBmp, x, height - y));
+		synchronized (tokens) {
+			tokens.add(new Token(c, tokenBmp, x, height - y));
 		}
 	}
-	
-	public void click(MotionEvent event){
-//		if(event.getEventTime() - event.getDownTime() > 200)
+
+	public void actionDown(PointF p) {
+		pointDown = p;
+	}
+
+	public void actionUp(MotionEvent event) {
+		float xDelta = (pointDown.x - event.getX())
+				* (pointDown.x - event.getX());
+		float yDelta = (pointDown.y - event.getY())
+				* (pointDown.y - event.getY());
+		float distance = (float) Math.sqrt(xDelta + yDelta);
+		if (distance < 10.0) {
 			addToken(event.getX(), event.getY());
-		Main.debug("time: %d", (int)(event.getEventTime() - event.getDownTime()));
-			
+			view.requestRender();
+		} else {
+			countdownTimer.start();
+		}
+	}
+
+	private void initializeCountdown() {
+		countdownTimer = new CountDownTimer(10000, 100) {
+
+			@Override
+			public void onTick(long millisUntilFinished) {
+				needle.setRotAngle(10);
+				update();
+				view.requestRender();
+			}
+
+			@Override
+			public void onFinish() {
+			}
+		};
+	}
+
+	private Token getNearestToken() {
+		Token nearest = null;
+		double min = Double.MAX_VALUE;
+		double actual = 0.0;
+		for (Token t : tokens) {
+			//TODO
+			actual = Math.min(Math.abs(needle.getAngle() - t.getAngle()), 
+					360-(Math.abs(needle.getAngle() - t.getAngle())));
+//			Main.debug("distancia a %s: %f", choices.get(tokens.indexOf(t)).getName(), actual);
+			if (actual < min) {
+				min = actual;
+				nearest = t;
+			}
+		}
+//		Main.debug("nearest: %s, distancia: %f, aguja: %f", 
+//				choices.get(tokens.indexOf(nearest)).getName(), min, needle.getAngle());
+		return nearest;
+	}
+
+	private void update() {
+		if (!tokens.isEmpty()) {
+			GLBitmap actual = getNearestToken().getGLBitmap();
+			if (lastNearest != null && !actual.equals(lastNearest)) {
+				lastNearest.setHeight(50);
+				lastNearest.setWidth(50);
+			}
+			actual.setHeight(80);
+			actual.setWidth(80);
+			lastNearest = actual;
+		}
 	}
 
 }
