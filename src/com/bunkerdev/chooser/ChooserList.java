@@ -231,6 +231,7 @@ public class ChooserList extends Activity{
 				star.setBackgroundResource(R.drawable.silver_star);
 				switch (type) {
 				case R.id.rbSimple:
+					Main.tracker.trackEvent("Click", "Buttons", "newOption", 1);
 					EditText opNameView = (EditText) createOptionDialog.findViewById(R.id.optionName);
 					Editable nameEdit = opNameView.getText();
 					nameEdit.clearSpans();
@@ -252,6 +253,7 @@ public class ChooserList extends Activity{
 					opNameView.setText("");
 					break;
 				case R.id.rbRange:
+					Main.tracker.trackEvent("Click", "Buttons", "newOption", 2);
 					EditText etRangeIni = (EditText) createOptionDialog.findViewById(R.id.rangeIni);
 					EditText etRangeEnd = (EditText) createOptionDialog.findViewById(R.id.rangeEnd);
 					try {
@@ -287,7 +289,6 @@ public class ChooserList extends Activity{
 				default:
 					break;
 				}
-				Main.tracker.trackEvent("Click", "Buttons", "newOption", type);
 			}
 		});
 		View newOption = (View) inflater.inflate(R.layout.new_option, null);
