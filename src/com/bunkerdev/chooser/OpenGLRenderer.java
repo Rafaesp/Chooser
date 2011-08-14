@@ -36,6 +36,7 @@ public class OpenGLRenderer implements Renderer {
 	private Timer timer;
 	private TimerTask updateTask;
 	private double remainingDegrees;
+	private boolean running;
 
 	private int lastFrameDraw = 0;
 	private int frameSampleTime = 0;
@@ -51,6 +52,9 @@ public class OpenGLRenderer implements Renderer {
 		random = new WeightedRandom(choices);
 
 		CENTER = new double[2];
+		
+		running = false;
+		timer = new Timer();
 	}
 
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
@@ -170,8 +174,11 @@ public class OpenGLRenderer implements Renderer {
 				else
 					remainingDegrees += angle2;
 				
-				initializeTimer();
-				timer.schedule(updateTask, 0, 50);
+				if(!running){
+					running = true;
+					initializeTimer();
+					timer.schedule(updateTask, 0, 50);
+				}
 			}
 		}
 	}
@@ -200,13 +207,14 @@ public class OpenGLRenderer implements Renderer {
 	}
 
 	private void initializeTimer() {
-		timer = new Timer();
 		updateTask = new TimerTask() {
 
 			@Override
 			public void run() {
-				if (remainingDegrees <= 0)
-					timer.cancel();
+				if (remainingDegrees <= 0){
+					updateTask.cancel();
+					running = false;
+				}
 				update();
 			}
 		};
