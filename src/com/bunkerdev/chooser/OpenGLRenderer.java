@@ -159,7 +159,7 @@ public class OpenGLRenderer implements Renderer {
 				
 				float speed = distance
 						/ (System.currentTimeMillis() - timeDown);
-				int turns = (int) Math.round(2.857142857 * speed + 1.714285714);
+				int turns = (int) Math.round(2.857142857 * speed + 2);
 
 				remainingDegrees = 360 * turns;
 				double angle1 = Math.abs(needle.getAngle() - chosen.getAngle());
@@ -180,9 +180,7 @@ public class OpenGLRenderer implements Renderer {
 		if (!tokens.isEmpty()) {
 			double step = -0.0202 * Math.pow(remainingDegrees / 360, 3.0)
 					+ 0.1096 * Math.pow(remainingDegrees / 360, 2.0) + 2.8465
-					* remainingDegrees / 360 + 0.5519;
-			if(step < 2.0)
-				step = 2.0;
+					* remainingDegrees / 360 + 2;
 			if(remainingDegrees < 2.0)
 				step = remainingDegrees;
 			
