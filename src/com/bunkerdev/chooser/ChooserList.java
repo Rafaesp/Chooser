@@ -76,8 +76,8 @@ public class ChooserList extends Activity{
 	private boolean favorited;
 	private CountDownTimer resultCountdown;
 	private TextSwitcher txtSwitcher;
-
-	private static String tag = "TAG";
+	
+	private int tracker_choices_times = 0;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -114,6 +114,8 @@ public class ChooserList extends Activity{
 		chooseBtn.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
+				tracker_choices_times++;
+				Main.tracker.trackEvent("Click", "Buttons", "choose", numChoices);
 				int maxChoices = getMaxChoices();
 				if(numChoices > maxChoices){
 					numChoices = maxChoices;
@@ -163,6 +165,7 @@ public class ChooserList extends Activity{
 			choices.addAll(((Main)getParent()).getAux());
 			expAdapter.refreshChoices(((Main)getParent()).getAux());
 		}
+		Main.tracker.trackPageView("/ChooserList");
 	}
 
 	private void initializeWheel(){
@@ -284,7 +287,7 @@ public class ChooserList extends Activity{
 				default:
 					break;
 				}
-
+				Main.tracker.trackEvent("Click", "Buttons", "newOption", type);
 			}
 		});
 		View newOption = (View) inflater.inflate(R.layout.new_option, null);
@@ -329,12 +332,14 @@ public class ChooserList extends Activity{
 		Button backBtn = (Button) popupView.findViewById(R.id.btnResultLeft);
 		backBtn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				Main.tracker.trackEvent("Click", "Buttons", "anotherResult", tracker_choices_times);
 				resultPopup.dismiss();
 			}
 		});
 		Button exitBtn = (Button) popupView.findViewById(R.id.btnResultRight);
 		exitBtn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				Main.tracker.trackEvent("Click", "Buttons", "exitFromResult", tracker_choices_times);
 				finish();
 			}
 		});
@@ -398,6 +403,7 @@ public class ChooserList extends Activity{
 
 	@SuppressWarnings("unchecked")
 	private void saveFavorite(){
+		Main.tracker.trackEvent("Click", "Buttons", "saveFavorite", choices.size());
 		HashMap<String, ArrayList<Choice>> favorites = new HashMap<String, ArrayList<Choice>>();
 		
 		try{

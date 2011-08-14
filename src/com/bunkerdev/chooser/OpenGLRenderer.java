@@ -206,6 +206,7 @@ public class OpenGLRenderer implements Renderer {
 				if (remainingDegrees <= 0){
 					updateTask.cancel();
 					running = false;
+					Main.tracker.trackEvent("Click", "Buttons", "chooseToken", choices.size());
 				}
 				update();
 			}

@@ -53,6 +53,7 @@ public class WheelPosition extends Activity implements OnTouchListener{
 		view.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 		view.setOnTouchListener(this);
 		setContentView(view);
+		Main.tracker.trackPageView("/Wheel");
 	}
 
 }

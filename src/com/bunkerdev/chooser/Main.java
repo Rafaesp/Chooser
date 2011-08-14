@@ -1,6 +1,10 @@
 package com.bunkerdev.chooser;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Properties;
+
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 import android.app.TabActivity;
 import android.content.Intent;
@@ -13,11 +17,21 @@ public class Main extends TabActivity {
 	
 	private TabHost tabHost;
 	private ArrayList<Choice> aux;
+	public static GoogleAnalyticsTracker tracker;
 	
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.tabhost);
-
+	    
+	    tracker = GoogleAnalyticsTracker.getInstance();
+	    Properties gitSecrets = new Properties();
+		try {
+			gitSecrets.load(this.getClass().getClassLoader().getResourceAsStream("assets/GitSecrets"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	    tracker.startNewSession(gitSecrets.getProperty("ANALYTICS"), this);
+	    
 	    aux = new ArrayList<Choice>();
 	    
 	    Resources res = getResources(); // Resource object to get Drawables
@@ -51,6 +65,12 @@ public class Main extends TabActivity {
 	    tabHost.setCurrentTab(0);
 	    
 	}
+	
+	@Override
+	  protected void onDestroy() {
+	    super.onDestroy();
+	    tracker.stopSession();
+	  }
 	
 	public void switchTab(int tab){
         tabHost.setCurrentTab(tab);

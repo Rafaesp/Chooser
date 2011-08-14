@@ -20,7 +20,6 @@ import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnLongClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
@@ -75,6 +74,7 @@ public class Favorites extends ListActivity {
 		});
 		getListView().setAdapter(adapter);
 	}
+	
 
 	protected void removeFavorite() {
 		favorites.remove(keyClicked);
@@ -126,6 +126,7 @@ public class Favorites extends ListActivity {
 		for(String s :readFavorites())
 			adapter.add(s);
 		adapter.notifyDataSetChanged();
+		Main.tracker.trackPageView("/Favorites");
 	}
 	
 	private ArrayList<String> readFavorites(){
@@ -160,6 +161,7 @@ public class Favorites extends ListActivity {
 		.putBoolean(ChooserList.FROM_FAVORITES, true).commit();
 		((Main)this.getParent()).setAux(list);
 		((Main)this.getParent()).switchTab(0);
+		Main.tracker.trackEvent("Click", "Buttons", "readFavorite", favorites.size());
 	}
 	
 	private void saveFavorites(){
