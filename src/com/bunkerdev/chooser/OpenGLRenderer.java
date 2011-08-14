@@ -13,7 +13,6 @@ import android.graphics.Bitmap.Config;
 import android.graphics.PointF;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
-import android.os.CountDownTimer;
 import android.view.MotionEvent;
 
 public class OpenGLRenderer implements Renderer {
@@ -37,12 +36,6 @@ public class OpenGLRenderer implements Renderer {
 	private TimerTask updateTask;
 	private double remainingDegrees;
 	private boolean running;
-
-	private int lastFrameDraw = 0;
-	private int frameSampleTime = 0;
-	private int frameSamplesCollected = 0;
-	private int fps = 0;
-	private long now = 0l;
 
 	public OpenGLRenderer(GLSurfaceView v, Bitmap t, Bitmap n, Bitmap bg) {
 		view = v;
@@ -77,11 +70,10 @@ public class OpenGLRenderer implements Renderer {
 		height = h;
 		CENTER[0] = (double) width / 2;
 		CENTER[1] = (double) height / 2;
-		//TODO Radio: minimo(w, h)
-		circle = new GLBitmap(bgBmp, width / 2, height / 2, width, width);
-		needle = new GLBitmap(needleBmp, width / 2, height / 2, width, width);
+		int side = Math.min(width, height);
+		circle = new GLBitmap(bgBmp, width / 2, height / 2, side, side);
+		needle = new GLBitmap(needleBmp, width / 2, height / 2, side, side);
 		needle.setAngle(0);
-		// needle.setRotAngle(10);
 		// Sets the current view port to the new size.
 		gl.glViewport(0, 0, width, height);
 		// Select the projection matrix
