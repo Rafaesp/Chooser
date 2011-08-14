@@ -27,11 +27,15 @@ public class OpenGLRenderer implements Renderer {
 	private Bitmap tokenBmp;
 	private Bitmap bgBmp;
 	private Bitmap needleBmp;
+	private WeightedRandom random;
 	private int width;
 	private int height;
 	public static double[] CENTER;
 	private PointF pointDown;
-	private CountDownTimer countdownTimer;
+	private long timeDown;
+	private Timer timer;
+	private TimerTask updateTask;
+	private double remainingDegrees;
 
 	private int lastFrameDraw = 0;
 	private int frameSampleTime = 0;
@@ -44,9 +48,9 @@ public class OpenGLRenderer implements Renderer {
 		tokenBmp = t;
 		bgBmp = bg.copy(Config.RGB_565, false);
 		needleBmp = n.copy(Config.ARGB_4444, false);
+		random = new WeightedRandom(choices);
 
 		CENTER = new double[2];
-		initializeCountdown();
 	}
 
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
@@ -69,6 +73,7 @@ public class OpenGLRenderer implements Renderer {
 		height = h;
 		CENTER[0] = (double) width / 2;
 		CENTER[1] = (double) height / 2;
+		//TODO Radio: minimo(w, h)
 		circle = new GLBitmap(bgBmp, width / 2, height / 2, width, width);
 		needle = new GLBitmap(needleBmp, width / 2, height / 2, width, width);
 		needle.setAngle(0);
@@ -135,6 +140,7 @@ public class OpenGLRenderer implements Renderer {
 
 	public void actionDown(PointF p) {
 		pointDown = p;
+		timeDown = System.currentTimeMillis();
 	}
 
 	public void actionUp(MotionEvent event) {
@@ -147,22 +153,63 @@ public class OpenGLRenderer implements Renderer {
 			addToken(event.getX(), event.getY());
 			view.requestRender();
 		} else {
-			countdownTimer.start();
+			if (!tokens.isEmpty()) {
+				random = new WeightedRandom(choices);
+				Token chosen = choose();
+				
+				float speed = distance
+						/ (System.currentTimeMillis() - timeDown);
+				int turns = (int) Math.round(2.857142857 * speed + 1.714285714);
+
+				remainingDegrees = 360 * turns;
+				double angle1 = Math.abs(needle.getAngle() - chosen.getAngle());
+				double angle2 = 360 - (Math.abs(needle.getAngle() - chosen.getAngle()));
+
+				if(Math.abs((needle.getAngle()+angle1) - chosen.getAngle())<0.01)
+					remainingDegrees += angle1;
+				else
+					remainingDegrees += angle2;
+				
+				initializeTimer();
+				timer.schedule(updateTask, 0, 50);
+			}
 		}
 	}
 
-	private void initializeCountdown() {
-		countdownTimer = new CountDownTimer(10000, 100) {
-
-			@Override
-			public void onTick(long millisUntilFinished) {
-				needle.setRotAngle(10);
-				update();
-				view.requestRender();
+	private void update() {
+		if (!tokens.isEmpty()) {
+			double step = -0.0202 * Math.pow(remainingDegrees / 360, 3.0)
+					+ 0.1096 * Math.pow(remainingDegrees / 360, 2.0) + 2.8465
+					* remainingDegrees / 360 + 0.5519;
+			if(step < 2.0)
+				step = 2.0;
+			if(remainingDegrees < 2.0)
+				step = remainingDegrees;
+			
+			needle.incrementAngle(step);
+			remainingDegrees -= step;
+	
+			GLBitmap actual = getNearestToken().getGLBitmap();
+			if (lastNearest != null && !actual.equals(lastNearest)) {
+				lastNearest.setHeight(50);
+				lastNearest.setWidth(50);
 			}
+			actual.setHeight(80);
+			actual.setWidth(80);
+			lastNearest = actual;
+			view.requestRender();
+		}
+	}
+
+	private void initializeTimer() {
+		timer = new Timer();
+		updateTask = new TimerTask() {
 
 			@Override
-			public void onFinish() {
+			public void run() {
+				if (remainingDegrees <= 0)
+					timer.cancel();
+				update();
 			}
 		};
 	}
@@ -172,31 +219,24 @@ public class OpenGLRenderer implements Renderer {
 		double min = Double.MAX_VALUE;
 		double actual = 0.0;
 		for (Token t : tokens) {
-			//TODO
-			actual = Math.min(Math.abs(needle.getAngle() - t.getAngle()), 
-					360-(Math.abs(needle.getAngle() - t.getAngle())));
-//			Main.debug("distancia a %s: %f", choices.get(tokens.indexOf(t)).getName(), actual);
+			actual = Math.min(Math.abs(needle.getAngle() - t.getAngle()),
+					360 - (Math.abs(needle.getAngle() - t.getAngle())));
+			// Main.debug("distancia a %s: %f",
+			// choices.get(tokens.indexOf(t)).getName(), actual);
 			if (actual < min) {
 				min = actual;
 				nearest = t;
 			}
 		}
-//		Main.debug("nearest: %s, distancia: %f, aguja: %f", 
-//				choices.get(tokens.indexOf(nearest)).getName(), min, needle.getAngle());
+		// Main.debug("nearest: %s, distancia: %f, aguja: %f",
+		// choices.get(tokens.indexOf(nearest)).getName(), min,
+		// needle.getAngle());
 		return nearest;
 	}
 
-	private void update() {
-		if (!tokens.isEmpty()) {
-			GLBitmap actual = getNearestToken().getGLBitmap();
-			if (lastNearest != null && !actual.equals(lastNearest)) {
-				lastNearest.setHeight(50);
-				lastNearest.setWidth(50);
-			}
-			actual.setHeight(80);
-			actual.setWidth(80);
-			lastNearest = actual;
-		}
+	private Token choose() {
+		Choice c = random.getChoice(1).get(0);
+		return tokens.get(choices.indexOf(c));
 	}
 
 }

@@ -90,7 +90,9 @@ public class GLBitmap implements GLDrawable{
 	}
 	
 	public void incrementAngle(double step) {
-		angle = angle+step;
+		if(angle+step > 360.0)
+			angle -= 360.0;
+		angle+=step;
 	}
 	
 	public void incrementAngle() {
