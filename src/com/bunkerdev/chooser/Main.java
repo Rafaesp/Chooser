@@ -69,6 +69,7 @@ public class Main extends TabActivity {
 	@Override
 	  protected void onDestroy() {
 	    super.onDestroy();
+	    tracker.dispatch();
 	    tracker.stopSession();
 	  }
 	
