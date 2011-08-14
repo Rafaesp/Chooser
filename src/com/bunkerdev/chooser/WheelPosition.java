@@ -14,12 +14,34 @@ import android.view.View.OnTouchListener;
 public class WheelPosition extends Activity implements OnTouchListener{
 
 	private OpenGLRenderer renderer;
+	private GLSurfaceView view;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		GLSurfaceView view = new GLSurfaceView(this);
+		
+	}
+
+	public boolean onTouch(View v, MotionEvent event) {
+		if((event.getAction() & 255) == MotionEvent.ACTION_UP){
+			renderer.actionUp(event);
+		}else if((event.getAction() & 255) == MotionEvent.ACTION_DOWN){
+			renderer.actionDown(new PointF(event.getX(), event.getY()));
+		}
+		return true;
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		view = new GLSurfaceView(this);
 		Bitmap mole = BitmapFactory.decodeResource(getResources(),
 				R.drawable.mole128);
 		Bitmap bg = BitmapFactory.decodeResource(getResources(),
@@ -32,15 +54,5 @@ public class WheelPosition extends Activity implements OnTouchListener{
 		view.setOnTouchListener(this);
 		setContentView(view);
 	}
-
-	public boolean onTouch(View v, MotionEvent event) {
-		if((event.getAction() & 255) == MotionEvent.ACTION_UP){
-			renderer.actionUp(event);
-		}else if((event.getAction() & 255) == MotionEvent.ACTION_DOWN){
-			renderer.actionDown(new PointF(event.getX(), event.getY()));
-		}
-		return true;
-	}
-
 
 }
