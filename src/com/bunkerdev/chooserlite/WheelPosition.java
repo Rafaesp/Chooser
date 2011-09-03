@@ -69,7 +69,7 @@ public class WheelPosition extends Activity implements OnTouchListener{
 						public void onClick(DialogInterface dialog, int which) {
 							Main.tracker.trackEvent("Click", "Buttons", "GO PRO", 1);
 							Intent market = new Intent(Intent.ACTION_VIEW,
-									Uri.parse("market://details?id=com.bunkerdev.chooserlite"));
+									Uri.parse("market://details?id=com.bunkerdev.chooser"));
 							startActivity(market);
 						}
 					});
