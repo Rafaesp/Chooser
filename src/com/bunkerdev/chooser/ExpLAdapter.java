@@ -18,7 +18,6 @@ public class ExpLAdapter extends BaseExpandableListAdapter {
 	private ArrayList<LinearLayout> groups;
 	private ArrayList<LinearLayout> children;
 	private LayoutInflater inflater;
-	private static String tag = "TAG";
 	
 	
 	public ExpLAdapter(ArrayList<Choice> choices, LayoutInflater inf){

@@ -34,9 +34,7 @@ public class GLCircle implements GLDrawable {
 		initBuffers();
 		
 	}
-	private double degToRad(double deg){
-		return deg/180*Math.PI;
-	}
+
 	private void initBuffers(){
 		// a float is 4 bytes, therefore we multiply the number if
 		// vertices with 4.

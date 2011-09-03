@@ -2,7 +2,6 @@ package com.bunkerdev.chooser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 
 import android.util.Log;
 
@@ -17,7 +16,8 @@ public class WeightedRandom {
     public enum WeighingCase {ALLAI, ALLN, ALLAN, AIN, NAN, AIAN, AINAN, NOCASE};
     
     
-    public WeightedRandom(ArrayList<Choice> list){
+    @SuppressWarnings("unchecked")
+	public WeightedRandom(ArrayList<Choice> list){
         choices =  (ArrayList<Choice>)list.clone();
         choiceValues = new HashMap<Choice, Double>();
     }

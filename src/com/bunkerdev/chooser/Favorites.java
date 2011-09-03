@@ -129,6 +129,7 @@ public class Favorites extends ListActivity {
 		Main.tracker.trackPageView("/Favorites");
 	}
 	
+	@SuppressWarnings("unchecked")
 	private ArrayList<String> readFavorites(){
 		try{
 			//use buffering

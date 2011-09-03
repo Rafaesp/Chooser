@@ -113,19 +113,6 @@ public class OpenGLRenderer implements Renderer {
 				d.draw(gl);
 			}
 		}
-		// long now = System.currentTimeMillis();
-		// if (lastFrameDraw != 0) {
-		// int time = (int) (now - lastFrameDraw);
-		// frameSampleTime += time;
-		// frameSamplesCollected++;
-		// if (frameSamplesCollected == 10) {
-		// fps = (int) (10000 / frameSampleTime);
-		// Main.debug("fps: %d   size: %d", fps, tokens.size());
-		// frameSampleTime = 0;
-		// frameSamplesCollected = 0;
-		// }
-		// }
-		// lastFrameDraw = (int) now;
 	}
 
 	public void addToken(float x, float y) {
