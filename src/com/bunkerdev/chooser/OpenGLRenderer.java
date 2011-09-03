@@ -58,7 +58,8 @@ public class OpenGLRenderer implements Renderer {
 
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		// Set the background color to black ( rgba ).
-		gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+//		gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		gl.glClearColor((float)183/255, (float)209/255, (float)163/255, 1.0f);
 		// Enable Smooth Shading, default not really needed.
 		gl.glShadeModel(GL10.GL_SMOOTH);
 		
