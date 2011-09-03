@@ -13,11 +13,14 @@ import android.graphics.Bitmap.Config;
 import android.graphics.PointF;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
+import android.os.Handler;
 import android.view.MotionEvent;
 
 public class OpenGLRenderer implements Renderer {
 
+	private static final boolean PRO = false;
 	private GLSurfaceView view;
+	private Handler handler;
 	private LinkedList<Token> tokens = new LinkedList<Token>();
 	private ArrayList<Choice> choices = new ArrayList<Choice>();
 	private GLBitmap needle;
@@ -39,8 +42,9 @@ public class OpenGLRenderer implements Renderer {
 	private double remainingDegrees;
 	private boolean running;
 
-	public OpenGLRenderer(GLSurfaceView v, Bitmap t, Bitmap n, Bitmap bg) {
+	public OpenGLRenderer(GLSurfaceView v, Handler h, Bitmap t, Bitmap n, Bitmap bg) {
 		view = v;
+		handler = h;
 		tokenBmp = t.copy(Config.ARGB_4444, false);
 		bgBmp = bg.copy(Config.ARGB_8888, false);
 		needleBmp = n.copy(Config.ARGB_8888, false);
@@ -116,15 +120,27 @@ public class OpenGLRenderer implements Renderer {
 	}
 
 	public void addToken(float x, float y) {
-		// x e y calculado porque android y opengl tienen distinto eje de
-		// coordenadas
-		Choice c = new Choice("");
-		choices.add(c);
-		synchronized (tokens) {
-			tokens.add(new Token(c, tokenBmp, x, height - y, sideToken));
+		if(tokens.size()>=3){
+			if(PRO){
+				Choice c = new Choice("");
+				choices.add(c);
+				synchronized (tokens) {
+					// x e y calculado porque android y opengl tienen distinto eje de
+					// coordenadas
+					tokens.add(new Token(c, tokenBmp, x, height - y, sideToken));
+				}
+			}else{
+				handler.sendEmptyMessage(0);
+			}
+		}else{
+			Choice c = new Choice("");
+			choices.add(c);
+			synchronized (tokens) {
+				tokens.add(new Token(c, tokenBmp, x, height - y, sideToken));
+			}
 		}
 	}
-
+	
 	public void actionDown(PointF p) {
 		pointDown = p;
 		timeDown = System.currentTimeMillis();

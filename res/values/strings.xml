@@ -28,4 +28,9 @@
     </string-array>
     <string name="btnCancel">Cancel</string>
     <string name="editNameTitle">Edit name</string>
+    <string name="proDialogTitle">Go PRO!</string>
+    <string name="proDialogMessage">Chooser Lite version is limited to three positions. You can upgrade 
+    								to PRO version to remove the limit.</string>
+    <string name="proDialogCancel">Not now</string>
+    <string name="proDialogOK">Upgrade now!</string>
 </resources>
