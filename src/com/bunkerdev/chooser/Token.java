@@ -8,27 +8,31 @@ import android.graphics.Bitmap;
 public class Token implements GLDrawable{
 	private double angle;
 	private Choice choice;
-	private GLBitmap glBitmap;
+	private GLDrawable draw;
 	
 	public Token(){}
 	
 	public Token(Choice c, Bitmap bmap, float x, float y) {
-		this(c, bmap, x, y, 50f, 50f);
+		this(c, bmap, x, y, 25f, 25f);
 		
 	}
+	
+	public Token(Choice c, Bitmap bmap, float x, float y, float side) {
+		this(c, bmap, x, y, side, side);
+	}
+	
 	public Token(Choice c, Bitmap bmap, float x, float y, float w, float h) {
-		glBitmap = new GLBitmap(bmap, x, y, w, h);
+		draw = new GLBitmap(bmap, x, y, w, h);
 		choice = c;
 		angle = Math.atan2(y - OpenGLRenderer.CENTER[1], x - OpenGLRenderer.CENTER[0])*180/Math.PI;
 		if(angle < 0){
 			angle = 360 - Math.abs(angle);
 		}
-//		Main.debug("Token angle: %f", angle);
 		c.setName(angle+"");
 	}
 	
 	public void draw(GL10 gl){
-		glBitmap.draw(gl);
+		draw.draw(gl);
 	}
 	public double getAngle() {
 		return angle;
@@ -40,12 +44,20 @@ public class Token implements GLDrawable{
 		return choice;
 	}
 	public void setChoice(Choice c) {
-		this.choice = choice;
+		this.choice = c;
 	}
-	public GLBitmap getGLBitmap() {
-		return glBitmap;
+	public GLDrawable getDraw() {
+		return draw;
 	}
-	public void setGLBitmap(GLBitmap bmp) {
-		this.glBitmap = glBitmap;
+	public void setGLBitmap(GLDrawable bmp) {
+		this.draw = bmp;
+	}
+
+	public void setSide(float i) {
+		draw.setSide(i);
+	}
+
+	public float getSide() {
+		return draw.getSide();
 	}
  }

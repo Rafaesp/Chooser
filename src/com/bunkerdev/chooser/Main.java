@@ -57,7 +57,7 @@ public class Main extends TabActivity {
 	    
 	    intent = new Intent().setClass(this, WheelPosition.class);
 	    spec = tabHost.newTabSpec("wheel").setIndicator("Wheel",
-	    				res.getDrawable(R.drawable.silver_star))
+	    				res.getDrawable(R.drawable.wheel))
 	    				.setContent(intent);
 	    tabHost.addTab(spec);
 	    

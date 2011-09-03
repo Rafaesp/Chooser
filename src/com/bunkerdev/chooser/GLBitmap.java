@@ -22,10 +22,11 @@ public class GLBitmap implements GLDrawable{
 	private int textureId = -1;
 
 	// Our vertices.
-	private float vertices[] = { -0.5f, 0.5f, 0.0f, // 0, Top Left
-			-0.5f, -0.5f, 0.0f, // 1, Bottom Left
-			0.5f, -0.5f, 0.0f, // 2, Bottom Right
-			0.5f, 0.5f, 0.0f, // 3, Top Right
+	private float vertices[] = { 
+			-0.5f, 0.5f, // 0, Top Left
+			-0.5f, -0.5f, // 1, Bottom Left
+			0.5f, -0.5f, // 2, Bottom Right
+			0.5f, 0.5f // 3, Top Right
 	};
 
 	// The order we like to connect them.
@@ -51,7 +52,7 @@ public class GLBitmap implements GLDrawable{
 		// Main.debug("angle: %f, deltax: %f, deltay: %f", angle,
 		// (OpenGLRenderer.CENTER[1]-y), (OpenGLRenderer.CENTER[0]-x));
 
-		bitmap = bmp.copy(Bitmap.Config.ARGB_8888, false);
+		bitmap = bmp;
 		shouldLoadTexture = true;
 		initBuffers();
 	}
@@ -130,6 +131,15 @@ public class GLBitmap implements GLDrawable{
 	public void setHeight(float height) {
 		this.height = height;
 	}
+	
+	public float getSide() {
+		return height == width? height : -1;
+	}
+
+	public void setSide(float side) {
+		this.height = side;
+		this.width = side;
+	}
 
 	public float[] getTextureCoords() {
 		return textureCoords;
@@ -155,35 +165,22 @@ public class GLBitmap implements GLDrawable{
 	 * @param gl
 	 */
 	public void draw(GL10 gl) {
-		// Counter-clockwise winding.
-		gl.glFrontFace(GL10.GL_CCW);
-		// Enable face culling.
-		gl.glEnable(GL10.GL_CULL_FACE);
-		// Para que las transparencias de bitmaps se "fundan"
-		gl.glEnable(GL10.GL_BLEND);
-		// What faces to remove with the face culling.
-		gl.glCullFace(GL10.GL_BACK);
-		// Para el blend
-		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
-		// Enabled the vertices buffer for writing and to be used during
-		// rendering.
-		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+		gl.glEnable(GL10.GL_TEXTURE_2D);
+		// Enable the texture state
+		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 		// Specifies the location and data format of an array of vertex
 		// coordinates to use when rendering.
-		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
+		gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertexBuffer);
 
 		if (shouldLoadTexture) {
 			loadGLTexture(gl);
 			shouldLoadTexture = false;
 		}
-		gl.glEnable(GL10.GL_TEXTURE_2D);
-		// Enable the texture state
-		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+
 		// Point to our buffers
 		gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, textureId);
 
-		// Point out the where the color buffer is.
 		gl.glPushMatrix();
 		gl.glTranslatef(x, y, 0f);
 		gl.glRotatef((float) angle, 0f, 0f, 1f);
@@ -194,17 +191,11 @@ public class GLBitmap implements GLDrawable{
 		gl.glDrawElements(GL10.GL_TRIANGLES, indices.length,
 				GL10.GL_UNSIGNED_SHORT, indexBuffer);
 		gl.glPopMatrix();
-
-		// Disable the vertices buffer.
-		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-
 		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-
-		// Disable face culling.
-		gl.glDisable(GL10.GL_CULL_FACE);
+		gl.glDisable(GL10.GL_TEXTURE_2D);
 	}
 
-	private void loadGLTexture(GL10 gl) { // New function
+	private void loadGLTexture(GL10 gl) {
 		// Generate one texture pointer...
 		int[] textures = new int[1];
 		gl.glGenTextures(1, textures, 0);

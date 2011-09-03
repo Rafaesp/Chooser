@@ -22,13 +22,15 @@ public class OpenGLRenderer implements Renderer {
 	private ArrayList<Choice> choices = new ArrayList<Choice>();
 	private GLBitmap needle;
 	private GLBitmap circle;
-	private GLBitmap lastNearest;
+	private GLDrawable lastNearest;
 	private Bitmap tokenBmp;
 	private Bitmap bgBmp;
 	private Bitmap needleBmp;
 	private WeightedRandom random;
 	private int width;
 	private int height;
+	private int sideToken;
+	private int sideTokenBig;
 	public static double[] CENTER;
 	private PointF pointDown;
 	private long timeDown;
@@ -39,9 +41,9 @@ public class OpenGLRenderer implements Renderer {
 
 	public OpenGLRenderer(GLSurfaceView v, Bitmap t, Bitmap n, Bitmap bg) {
 		view = v;
-		tokenBmp = t;
-		bgBmp = bg.copy(Config.RGB_565, false);
-		needleBmp = n.copy(Config.ARGB_4444, false);
+		tokenBmp = t.copy(Config.ARGB_4444, false);
+		bgBmp = bg.copy(Config.ARGB_8888, false);
+		needleBmp = n.copy(Config.ARGB_8888, false);
 		random = new WeightedRandom(choices);
 
 		CENTER = new double[2];
@@ -52,25 +54,39 @@ public class OpenGLRenderer implements Renderer {
 
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		// Set the background color to black ( rgba ).
-		gl.glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
+		gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		// Enable Smooth Shading, default not really needed.
 		gl.glShadeModel(GL10.GL_SMOOTH);
-		// Depth buffer setup.
-		gl.glClearDepthf(1.0f);
-		// Enables depth testing.
-		gl.glEnable(GL10.GL_DEPTH_TEST);
-		// The type of depth testing to do.
-		gl.glDepthFunc(GL10.GL_LEQUAL);
-		// Really nice perspective calculations.
-		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
+		
+		// Counter-clockwise winding.
+		gl.glFrontFace(GL10.GL_CCW);
+		// Enable face culling.
+		gl.glEnable(GL10.GL_CULL_FACE);
+		// Para que las transparencias de bitmaps se "fundan"
+		gl.glEnable(GL10.GL_BLEND);
+		// What faces to remove with the face culling.
+		gl.glCullFace(GL10.GL_BACK);
+		// Para el blend
+		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+		// Enabled the vertices buffer for writing and to be used during
+		// rendering.
+		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 	}
-
+	
+	public void onSurfaceDestroyed(GL10 gl, int w, int h){
+		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		gl.glDisable(GL10.GL_CULL_FACE);
+	}
+	
 	public void onSurfaceChanged(GL10 gl, int w, int h) {
 		width = w;
 		height = h;
 		CENTER[0] = (double) width / 2;
 		CENTER[1] = (double) height / 2;
 		int side = Math.min(width, height);
+		sideToken = side/5;
+		sideTokenBig = side/3;
 		circle = new GLBitmap(bgBmp, width / 2, height / 2, side, side);
 		needle = new GLBitmap(needleBmp, width / 2, height / 2, side, side);
 		needle.setAngle(0);
@@ -78,24 +94,18 @@ public class OpenGLRenderer implements Renderer {
 		gl.glViewport(0, 0, width, height);
 		// Select the projection matrix
 		gl.glMatrixMode(GL10.GL_PROJECTION);
-		// Reset the projection matrix
-		gl.glLoadIdentity();
 		// Poniendolo en ortogonal
 		// left, right, bottom, top, near, far
 		gl.glOrthof(0, w, -0, h, -1, 1);
-		// Calculate the aspect ratio of the window
-		// GLU.gluPerspective(gl, 45.0f, (float) width / (float) height, 0.1f,
-		// 100.0f);
 		// Select the modelview matrix
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		// Reset the modelview matrix
 		gl.glLoadIdentity();
-
 	}
 
 	public void onDrawFrame(GL10 gl) {
-		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
-		gl.glLoadIdentity();
+		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 		circle.draw(gl);
 		needle.draw(gl);
 		synchronized (tokens) {
@@ -118,19 +128,13 @@ public class OpenGLRenderer implements Renderer {
 		// lastFrameDraw = (int) now;
 	}
 
-	// public void addDrawable(GLDrawable d) {
-	// synchronized (drawables) {
-	// drawables.add(d);
-	// }
-	// }
-
 	public void addToken(float x, float y) {
 		// x e y calculado porque android y opengl tienen distinto eje de
 		// coordenadas
 		Choice c = new Choice("");
 		choices.add(c);
 		synchronized (tokens) {
-			tokens.add(new Token(c, tokenBmp, x, height - y));
+			tokens.add(new Token(c, tokenBmp, x, height - y, sideToken));
 		}
 	}
 
@@ -186,13 +190,11 @@ public class OpenGLRenderer implements Renderer {
 			needle.incrementAngle(step);
 			remainingDegrees -= step;
 	
-			GLBitmap actual = getNearestToken().getGLBitmap();
+			GLDrawable actual = getNearestToken().getDraw();
 			if (lastNearest != null && !actual.equals(lastNearest)) {
-				lastNearest.setHeight(50);
-				lastNearest.setWidth(50);
+				lastNearest.setSide(sideToken);
 			}
-			actual.setHeight(80);
-			actual.setWidth(80);
+			actual.setSide(sideTokenBig);
 			lastNearest = actual;
 			view.requestRender();
 		}

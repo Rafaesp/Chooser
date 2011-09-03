@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.PointF;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -43,9 +42,9 @@ public class WheelPosition extends Activity implements OnTouchListener{
 		super.onResume();
 		view = new GLSurfaceView(this);
 		Bitmap mole = BitmapFactory.decodeResource(getResources(),
-				R.drawable.mole128);
+				R.drawable.sphere);
 		Bitmap bg = BitmapFactory.decodeResource(getResources(),
-				R.drawable.circle);
+				R.drawable.bgwheel);
 		Bitmap needle = BitmapFactory.decodeResource(getResources(),
 				R.drawable.needle);
 		renderer = new OpenGLRenderer(view, mole, needle, bg);
