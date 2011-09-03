@@ -152,6 +152,12 @@ public class ChooserList extends Activity{
 	}
 
 	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		Main.tracker.trackEvent("Click", "Buttons", "exit", tracker_choices_times);
+	}
+
+	@Override
 	protected void onResume() {
 		super.onResume();
 		SharedPreferences sp = getSharedPreferences(PREFS, MODE_PRIVATE);
@@ -333,14 +339,14 @@ public class ChooserList extends Activity{
 		Button backBtn = (Button) popupView.findViewById(R.id.btnResultLeft);
 		backBtn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				Main.tracker.trackEvent("Click", "Buttons", "anotherResult", tracker_choices_times);
+				Main.tracker.trackEvent("Click", "Buttons", "anotherResult", 1);
 				resultPopup.dismiss();
 			}
 		});
 		Button exitBtn = (Button) popupView.findViewById(R.id.btnResultRight);
 		exitBtn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				Main.tracker.trackEvent("Click", "Buttons", "exitFromResult", tracker_choices_times);
+				Main.tracker.trackEvent("Click", "Buttons", "exitFromResult", 1);
 				finish();
 			}
 		});
