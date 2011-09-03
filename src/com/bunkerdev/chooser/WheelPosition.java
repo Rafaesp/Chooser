@@ -66,6 +66,7 @@ public class WheelPosition extends Activity implements OnTouchListener{
 						
 						public void onClick(DialogInterface dialog, int which) {
 							//TODO llevar al market
+							Main.tracker.trackEvent("Click", "Buttons", "GO PRO", 1);
 						}
 					});
 					builder.setPositiveButton(R.string.proDialogCancel, new DialogInterface.OnClickListener() {

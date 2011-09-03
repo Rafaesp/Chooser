@@ -18,7 +18,7 @@ import android.view.MotionEvent;
 
 public class OpenGLRenderer implements Renderer {
 
-	private static final boolean PRO = false;
+	private static final boolean PRO = true;
 	private GLSurfaceView view;
 	private Handler handler;
 	private LinkedList<Token> tokens = new LinkedList<Token>();
@@ -125,11 +125,10 @@ public class OpenGLRenderer implements Renderer {
 				Choice c = new Choice("");
 				choices.add(c);
 				synchronized (tokens) {
-					// x e y calculado porque android y opengl tienen distinto eje de
-					// coordenadas
 					tokens.add(new Token(c, tokenBmp, x, height - y, sideToken));
 				}
 			}else{
+				Main.tracker.trackEvent("Click", "Buttons", "NeedPRO", 1);
 				handler.sendEmptyMessage(0);
 			}
 		}else{
