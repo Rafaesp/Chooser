@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package com.bunkerdev.chooser.wheel.adapters;
+package com.bunkerdev.chooserlite.wheel.adapters;
 
 import android.database.DataSetObserver;
 import android.view.View;

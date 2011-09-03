@@ -1,4 +1,4 @@
-package com.bunkerdev.chooser;
+package com.bunkerdev.chooserlite;
 
 import javax.microedition.khronos.opengles.GL10;
 

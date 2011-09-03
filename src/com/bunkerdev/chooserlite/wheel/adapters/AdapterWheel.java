@@ -14,11 +14,11 @@
  *  limitations under the License.
  */
 
-package com.bunkerdev.chooser.wheel.adapters;
+package com.bunkerdev.chooserlite.wheel.adapters;
 
 import android.content.Context;
 
-import com.bunkerdev.chooser.wheel.WheelAdapter;
+import com.bunkerdev.chooserlite.wheel.WheelAdapter;
 
 /**
  * Adapter class for old wheel adapter (deprecated WheelAdapter class).

@@ -1,4 +1,4 @@
-package com.bunkerdev.chooser;
+package com.bunkerdev.chooserlite;
 
 import java.io.Serializable;
 

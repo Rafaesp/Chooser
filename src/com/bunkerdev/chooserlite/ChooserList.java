@@ -1,4 +1,4 @@
-package com.bunkerdev.chooser;
+package com.bunkerdev.chooserlite;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -50,9 +50,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
-import com.bunkerdev.chooser.Choice.Weighing;
-import com.bunkerdev.chooser.wheel.WheelView;
-import com.bunkerdev.chooser.wheel.adapters.NumericWheelAdapter;
+import com.bunkerdev.chooserlite.Choice.Weighing;
+import com.bunkerdev.chooserlite.wheel.WheelView;
+import com.bunkerdev.chooserlite.wheel.adapters.NumericWheelAdapter;
 import com.google.ads.AdRequest;
 import com.google.ads.AdSize;
 import com.google.ads.AdView;
@@ -389,7 +389,6 @@ public class ChooserList extends Activity{
 		adLayout.addView(adView);
 		
 		AdRequest request = new AdRequest();
-//		request.setTesting(true);
 		adView.loadAd(request);
 		
 		WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);

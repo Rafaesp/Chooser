@@ -17,7 +17,7 @@
  *  limitations under the License.
  */
 
-package com.bunkerdev.chooser.wheel;
+package com.bunkerdev.chooserlite.wheel;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -35,8 +35,8 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
 
-import com.bunkerdev.chooser.R;
-import com.bunkerdev.chooser.wheel.adapters.WheelViewAdapter;
+import com.bunkerdev.chooserlite.R;
+import com.bunkerdev.chooserlite.wheel.adapters.WheelViewAdapter;
 
 /**
  * Numeric wheel view.

@@ -17,7 +17,7 @@
  *  limitations under the License.
  */
 
-package com.bunkerdev.chooser.wheel;
+package com.bunkerdev.chooserlite.wheel;
 
 import java.util.LinkedList;
 import java.util.List;

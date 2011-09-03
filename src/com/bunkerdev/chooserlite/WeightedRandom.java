@@ -1,11 +1,11 @@
-package com.bunkerdev.chooser;
+package com.bunkerdev.chooserlite;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.util.Log;
 
-import com.bunkerdev.chooser.Choice.Weighing;
+import com.bunkerdev.chooserlite.Choice.Weighing;
 
 
 public class WeightedRandom {

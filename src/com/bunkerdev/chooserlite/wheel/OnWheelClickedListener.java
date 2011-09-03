@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package com.bunkerdev.chooser.wheel;
+package com.bunkerdev.chooserlite.wheel;
 
 /**
  * Wheel clicked listener interface.

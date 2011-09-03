@@ -1,10 +1,8 @@
-package com.bunkerdev.chooser;
+package com.bunkerdev.chooserlite;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
-
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 import android.app.TabActivity;
 import android.content.Intent;
@@ -12,6 +10,8 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TabHost;
+
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class Main extends TabActivity {
 	

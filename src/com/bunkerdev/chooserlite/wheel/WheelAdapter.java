@@ -14,21 +14,33 @@
  *  limitations under the License.
  */
 
-package com.bunkerdev.chooser.wheel;
+package com.bunkerdev.chooserlite.wheel;
 
 /**
- * Wheel scrolled listener interface.
+ * Wheel adapter interface
+ * 
+ * @deprecated Use WheelViewAdapter
  */
-public interface OnWheelScrollListener {
+public interface WheelAdapter {
 	/**
-	 * Callback method to be invoked when scrolling started.
-	 * @param wheel the wheel view whose state has changed.
+	 * Gets items count
+	 * @return the count of wheel items
 	 */
-	void onScrollingStarted(WheelView wheel);
+	public int getItemsCount();
 	
 	/**
-	 * Callback method to be invoked when scrolling ended.
-	 * @param wheel the wheel view whose state has changed.
+	 * Gets a wheel item by index.
+	 * 
+	 * @param index the item index
+	 * @return the wheel item text or null
 	 */
-	void onScrollingFinished(WheelView wheel);
+	public String getItem(int index);
+	
+	/**
+	 * Gets maximum item length. It is used to determine the wheel width. 
+	 * If -1 is returned there will be used the default wheel width.
+	 * 
+	 * @return the maximum item length or -1
+	 */
+	public int getMaximumLength();
 }

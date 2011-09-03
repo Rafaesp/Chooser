@@ -1,4 +1,4 @@
-package com.bunkerdev.chooser;
+package com.bunkerdev.chooserlite;
 
 import java.util.ArrayList;
 
@@ -11,7 +11,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.bunkerdev.chooser.Choice.Weighing;
+import com.bunkerdev.chooserlite.Choice.Weighing;
 
 public class ExpLAdapter extends BaseExpandableListAdapter {
 	
