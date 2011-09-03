@@ -18,7 +18,7 @@ import android.view.MotionEvent;
 
 public class OpenGLRenderer implements Renderer {
 
-	private static final boolean PRO = true;
+	private static final boolean PRO = false;
 	private GLSurfaceView view;
 	private Handler handler;
 	private LinkedList<Token> tokens = new LinkedList<Token>();
