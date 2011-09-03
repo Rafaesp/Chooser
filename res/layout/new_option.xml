@@ -30,6 +30,7 @@
 	    </RadioButton>
     </RadioGroup>
     <EditText
+    	android:singleLine="true"
     	android:layout_centerHorizontal="true"
 	    android:id="@+id/optionName"
 	    android:textSize="16sp"
